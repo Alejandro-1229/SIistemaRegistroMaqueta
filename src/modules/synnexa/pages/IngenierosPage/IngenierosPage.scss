@@ -1,0 +1,232 @@
+.table-content-ing {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.content-busqueda {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: auto;
+    align-items: center;
+    /*flex-wrap: wrap;  Envuelve los elementos en pantallas pequeñas */
+}
+
+.busqueda-funcion{
+    margin-right: 5px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.btn-drop {
+    background-color: #55a356;
+    color: rgb(255, 255, 255);
+    padding: 16px;
+    font-size: 16px; 
+    border: none;
+    cursor: pointer;
+}
+
+.option-search {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.option-search a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.option-search a:hover {
+    background-color: #b4b1b1
+}
+
+.dropdown:hover .option-search {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #327234;
+}
+
+
+/*BUSQUEDAS FUNCION Y EXPEDIENTES*/
+.search-function {
+    display: none;
+    margin-left: 5px;
+}
+
+.search-file {
+    display: none;
+    margin-left: 5px;
+}
+
+#find-function {
+    display: block;
+    flex-wrap: wrap; /* Permite que los elementos se envuelvan en pantallas pequeñas */
+}
+
+#find-function label {
+    width: max-content;
+    margin-right: 5px;
+}
+
+#find-function select,
+#find-function input[type=date] {
+    width: 150px;
+    height: 2em;
+    margin-right: 10px;
+} 
+
+#find-function input[type=submit] {
+    width: 50px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+#find-file{
+    display: block;
+}
+#find-file input[type=text]{
+    width: 150px;
+    height: 2.5em;
+    margin-right: 10px;
+}
+#find-file input[type=submit]{
+    width: auto;
+    height: 2.5em;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+/* Media queries */
+@media screen and (max-width: 768px) {
+    #find-function select,
+    #find-function input[type=date] {
+        width: 100%; /* Establece el ancho al 100% en pantallas pequeñas */
+        margin-right: 0; /* Elimina el margen derecho en pantallas pequeñas */
+        margin-bottom: 10px; /* Agrega un espacio inferior en pantallas pequeñas */
+    }
+
+    #find-function input[type=submit] {
+        width: 100%; /* Establece el ancho al 100% en pantallas pequeñas */
+        margin-right: 0; /* Elimina el margen derecho en pantallas pequeñas */
+    }
+} 
+
+
+
+
+
+/*EDICION TABLA*/
+#box-table-ing {
+    width: 90%;
+    margin: 0 auto;
+    overflow-x: auto;
+}
+
+
+/*width: max-content;*/
+
+#box-table-ing table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: center;
+    width: max-content;
+}
+
+#box-table-ing table thead th {
+    border: 1px solid;
+    background-color: #00b3ff;
+    border: 2px solid rgb(205, 205, 205);
+    padding: 20px;
+}
+
+/*padding: 15px 30px;*/
+#box-table-ing table tbody tr td {
+    border: 1px solid;
+    padding: 10px;
+    border: 2px solid rgb(174, 170, 170);
+}
+
+button {
+    background: #f2f3f4;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button img {
+    height: 20px;
+}
+
+
+/*EDICION */
+.popup-ingenieros {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    /* Añadir scroll cuando el contenido excede el tamaño del popup */
+}
+
+.overlay-ingenieros {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content-form-ingenieros {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+.content-form-ingenieros input{
+    width: 551px;
+    height: 25px;
+}
+.content-form-ingenieros select{
+    width: 555px;
+    height: 25px;
+}
+
+.buttons{
+    margin-top: 10px;
+}
+.buttons input[type=submit]{
+    padding: 5px 10px;
+    height: 30px;
+    width: 80px;
+}
