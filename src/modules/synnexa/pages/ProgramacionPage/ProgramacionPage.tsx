@@ -1,8 +1,30 @@
 import "./ProgramacionPage.scss";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
+import { useEffect, useState } from "react";
+import useProgramacionPage from "./useProgramacionPage";
 
 export const ProgramacionPage = () => {
+
+
+    const [data, setData] = useState([]);
+    const { navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, programacionList } = useProgramacionPage();
+
+    useEffect(() => {
+        listarProgramacion();
+    }, []);
+
+    const listarProgramacion = async () => {
+        try {
+            const programaciones = await programacionList();
+            setData(programaciones);
+        } catch (error) {
+            console.log("Error al listar los expedientes");
+
+        }
+    }
+
     return (
+
         <div className="global-programacion">
 
             <div className="header">
@@ -13,16 +35,15 @@ export const ProgramacionPage = () => {
                             <div>
                                 <h1>Sub Gerencia de Gestion del Riesgo de Desastres</h1>
                             </div>
-                            <div><a href="http://localhost:5173/">Cerrar Sesion</a></div>
+                            <div><a onClick={() => navegacionCierreSesion()}>Cerrar Sesion</a></div>
                         </div>
                     </div>
                 </div>
                 <nav id="menu">
-
                     <ul>
-                        <li><a href="http://localhost:5173/programacion">Programacion</a></li>
-                        <li><a href="http://localhost:5173/expediente">Expediente</a></li>
-                        <li><a href="http://localhost:5173/control">Control</a></li>
+                        <li><a onClick={() => navegacionProgramacion()}>Programacion</a></li>
+                        <li><a onClick={() => navegacionExpediente()}>Expediente</a></li>
+                        <li><a onClick={() => navegacionControl()}>Control</a></li>
                     </ul>
                 </nav>
             </div>
@@ -42,30 +63,20 @@ export const ProgramacionPage = () => {
                             <th>Fecha Devolucion</th>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>lkjoiu123456</td>
-                                <td>987654321159</td>
-                                <td>Centro Recreativo "Los Arcos del Edén"</td>
-                                <td>Av. América Oeste N° 750  Tienda A-1023 y A-1025 C.C. Mall Aventura Plaza, Urb. El Ingenio</td>
-                                <td>Posterior</td>
-                                <td>Ing. Carlos Villanueva</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>2024-03-01</td>
-                            </tr>
-                            <tr>
-                                <td>lkjoiu123456</td>
-                                <td>987654321159</td>
-                                <td>Centro Recreativo "Los Arcos del Edén"</td>
-                                <td>Av. América Oeste N° 750  Tienda A-1023 y A-1025 C.C. Mall Aventura Plaza, Urb. El Ingenio</td>
-                                <td>Posterior</td>
-                                <td>Ing. Carlos Villanueva</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td>2024-03-01</td>
-                            </tr>
+                            {data.map(programacion => (
+                                <tr key={programacion.idProg}>
+                                    <td>{programacion.numeroExpediente}</td>
+                                    <td>ruc</td>
+                                    <td>{programacion.nombreComercial}</td>
+                                    <td>{programacion.direccion}</td>
+                                    <td>{programacion.Tipo}</td>
+                                    <td>{programacion.inspector}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{programacion.fechaDevolucion}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
