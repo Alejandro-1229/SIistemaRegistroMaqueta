@@ -3,30 +3,101 @@ import editExpedienteIcon from "../../../../assets/image/editar.png";
 import sendExpedienteIcon from "../../../../assets/image/expediente.png";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import useControlPage from "./useControlPage";
 
 
 
 
 export const ControlPage = () => {
-      
-
-      const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
+    const [selectedOption, setSelectedOption] = useState('');
+    const { navegacionCierreSesion, navegacionProgramacion, navegacionExpediente, navegacionControl, controlList, findRazonSocial, findNumeroExpediente, findFuncion, findTipoItse } = useControlPage();
 
     useEffect(() => {
-        controlList();
+        fetchData();
     }, []);
 
-    const controlList = async () => {
+    const fetchData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/v1/controles`);
-            return setData(response.data.data.control);
+            const controles = await controlList();
+            setData(controles);
         } catch (error) {
-            return console.error('Error al buscar controles:', error);
+            console.error("Error fetching data:", error);
         }
-
-
     };
+
+    const buscarLocal = async (nombreComercial: string) => {
+        try {
+            const elemento = await findRazonSocial(nombreComercial);
+            setData(elemento);
+        } catch (error) {
+            console.error("Error searching element:", error);
+        }
+    };
+    const buscarNumeroExpediente = async (numeroExpediente: string) => {
+        try {
+            const elemento = await findNumeroExpediente(numeroExpediente);
+            setData(elemento);
+        } catch (error) {
+            console.error("Error searching element:", error);
+        }
+    };
+
+    const buscarFuncion = async (funcion: string | number) => {
+        try {
+            const elemento = await findFuncion(funcion);
+            setData(elemento);
+        } catch (error) {
+            console.error("Error searching element:", error);
+        }
+    };
+
+    const buscarTipoItse = async (tipoItse: string | number) => {
+        try {
+            const elemento = await findTipoItse(tipoItse);
+            setData(elemento);
+        } catch (error) {
+            console.error("Error searching element:", error);
+        }
+    };
+
+    const handleSubmitForRazonSocial = async (e) => {
+        e.preventDefault();
+        try {
+            await buscarLocal(searchValue);
+        } catch (error) {
+            console.error("Error handling submit:", error);
+        }
+    };
+
+    const handleSubmitForNumeroExpediente = async (e) => {
+        e.preventDefault();
+        try {
+            await buscarNumeroExpediente(searchValue);
+        } catch (error) {
+            console.error("Error handling submit:", error);
+        }
+    };
+
+    const handleSubmitForFuncion = async (e) => {
+        e.preventDefault();
+        try {
+            await buscarFuncion(selectedOption);
+        } catch (error) {
+            console.error("Error handling submit:", error);
+        }
+    };
+
+    const handleSubmitForTipoItse = async (e) => {
+        e.preventDefault();
+        try {
+            await buscarTipoItse(selectedOption);
+        } catch (error) {
+            console.error("Error handling submit:", error);
+        }
+    };
+
 
     return (
         <div className="global-control">
@@ -38,16 +109,16 @@ export const ControlPage = () => {
                             <div>
                                 <h1>Sub Gerencia de Gestion del Riesgo de Desastres</h1>
                             </div>
-                            <div><a href="http://localhost:5173/">Cerrar Sesion</a></div>
+                            <div><a onClick={() => navegacionCierreSesion()}>Cerrar Sesion</a></div>
                         </div>
                     </div>
                 </div>
                 <nav id="menu">
 
                     <ul>
-                        <li><a href="http://localhost:5173/programacion">Programacion</a></li>
-                        <li><a href="http://localhost:5173/expediente">Expediente</a></li>
-                        <li><a href="http://localhost:5173/control">Control</a></li>
+                        <li><a onClick={() => navegacionProgramacion()}>Programacion</a></li>
+                        <li><a onClick={() => navegacionExpediente()}>Expediente</a></li>
+                        <li><a onClick={() => navegacionControl()}>Control</a></li>
                     </ul>
                 </nav>
             </div>
@@ -67,25 +138,25 @@ export const ControlPage = () => {
                         </div>
                         <div className="tipos">
                             <div className="razon-social">
-                                <form action="">
+                                <form onSubmit={handleSubmitForRazonSocial} action="">
                                     <div className="input-group">
-                                        <input type="text" placeholder="Razon Social/Nombre Comercial" />
+                                        <input type="text" placeholder="Razon Social/Nombre Comercial" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                                         <input type="submit" value="Buscar" />
                                     </div>
                                 </form>
                             </div>
                             <div className="expediente">
-                                <form action="">
+                                <form onSubmit={handleSubmitForNumeroExpediente} action="">
                                     <div className="input-group">
-                                        <input type="text" placeholder="Numero de Expediente" />
+                                        <input type="text" placeholder="Numero de Expediente" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
                                         <input type="submit" value="Buscar" />
                                     </div>
                                 </form>
                             </div>
                             <div className="funcion">
-                                <form action="">
+                                <form onSubmit={handleSubmitForFuncion} action="">
                                     <div className="input-group">
-                                        <select name="" id="">
+                                        <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
                                             <option value="1">Seleccione Funcion</option>
                                             <option value="2">Encuentro</option>
                                             <option value="3">Comercio</option>
@@ -101,12 +172,12 @@ export const ControlPage = () => {
                                 </form>
                             </div>
                             <div className="tipo-itse">
-                                <form action="">
+                                <form onSubmit={handleSubmitForTipoItse} action="">
                                     <div className="input-group">
-                                        <select name="" id="">
-                                            <option value="">Tipo ITSE</option>
-                                            <option value="">Previa</option>
-                                            <option value="">Posterior</option>
+                                        <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
+                                            <option value="1">Tipo ITSE</option>
+                                            <option value="2">Previa</option>
+                                            <option value="3">Posterior</option>
                                         </select>
                                         <input type="submit" value="Buscar" />
                                     </div>
@@ -312,9 +383,7 @@ export const ControlPage = () => {
                                     <td>{control.fechaDevolucion_2}</td>
                                     <td>{control.numeroObservaciones}</td>
                                     <td>{control.areaRecepcion}</td>
-                                    <td>{control.pagoDerechoInspeccion}</td>                  
-
-                                        
+                                    <td>{control.pagoDerechoInspeccion}</td>
                                     <td><button type="submit"><img src={editExpedienteIcon} alt="" /></button></td>
                                     <td><button type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
                                 </tr>
