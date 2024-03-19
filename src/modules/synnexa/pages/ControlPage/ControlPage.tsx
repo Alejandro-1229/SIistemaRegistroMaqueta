@@ -95,7 +95,7 @@ export const ControlPage = () => {
             await buscarTipoItse(selectedOption);
         } catch (error) {
             console.error("Error handling submit:", error);
-        }
+        } 
     };
 
 

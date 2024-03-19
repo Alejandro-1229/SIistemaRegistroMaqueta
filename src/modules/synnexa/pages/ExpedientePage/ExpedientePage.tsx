@@ -3,9 +3,30 @@ import editExpedienteIcon from "../../../../assets/image/editar.png";
 import sendExpedienteIcon from "../../../../assets/image/expediente.png";
 import inspeccionLocalIcon from "../../../../assets/image/inspeccion-de-viviendas.png";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
+import { useEffect, useState } from "react";
+import useExpedientePage from "./useExpedientePage";
 
 export const ExpedientePage = () => {
+    const [data, setData] = useState([]);
+    const { navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList } = useExpedientePage();
+
+
+    useEffect(() => {
+        listarExpediente();
+    }, []);
+
+    const listarExpediente = async () => {
+        try {
+            const expedientes = await expedienteList();
+            setData(expedientes);
+        } catch (error) {
+            console.log("Error al listar los expedientes");
+
+        }
+    }
+
     return (
+
         <div className="global-expediente">
             <div className="header">
                 <div className="global-content-header">
@@ -15,16 +36,15 @@ export const ExpedientePage = () => {
                             <div>
                                 <h1>Sub Gerencia de Gestion del Riesgo de Desastres</h1>
                             </div>
-                            <div><a href="http://localhost:5173/">Cerrar Sesion</a></div>
+                            <div><a onClick={() => navegacionCierreSesion()}>Cerrar Sesion</a></div>
                         </div>
                     </div>
                 </div>
                 <nav id="menu">
-
                     <ul>
-                        <li><a href="http://localhost:5173/programacion">Programacion</a></li>
-                        <li><a href="http://localhost:5173/expediente">Expediente</a></li>
-                        <li><a href="http://localhost:5173/control">Control</a></li>
+                        <li><a onClick={() => navegacionProgramacion()}>Programacion</a></li>
+                        <li><a onClick={() => navegacionExpediente()}>Expediente</a></li>
+                        <li><a onClick={() => navegacionControl()}>Control</a></li>
                     </ul>
                 </nav>
             </div>
@@ -32,6 +52,7 @@ export const ExpedientePage = () => {
                 <div className="box-table">
                     <table>
                         <thead>
+                            <th>Numero Expediente</th>
                             <th>RUC</th>
                             <th>Nombre Comercial</th>
                             <th>Direccion</th>
@@ -46,33 +67,39 @@ export const ExpedientePage = () => {
                             <th>Estado</th>
                             <th>Fecha</th>
                             <th>Hora</th>
+                            <th>Inspectores</th>
                             <th>ILO</th>
                             <th colSpan={3}>Operaciones</th>
 
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>987564321789</td>
-                                <td>asdsaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</td>
-                                <td>Comida</td>
-                                <td>comida2</td>
-                                <td>ddddddd</td>
-                                <td>comida2</td>
-                                <td>Comida</td>
-                                <td>comida2</td>
-                                <td>Comida</td>
-                                <td>comida2</td>
-                                <td>Comida</td>
-                                <td>comida2</td>
-                                <td>Comida</td>
-                                <td>comida2</td>
-                                <td>Comida</td>
-                                <td><button id="showPopup" type="submit"><img src={editExpedienteIcon} alt="" /></button></td>
-                                <td><button type="submit"><img src={inspeccionLocalIcon} alt="" /></button></td>
-                                <td><button type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
-                            </tr> 
+                            {data.map(expediente => (
+                                <tr key={expediente.idExpe}>
+                                    <td>{expediente.numeroExpediente}</td>
+                                    <td>{expediente.ruc}</td>
+                                    <td>{expediente.nombreComercial}</td>
+                                    <td>{expediente.direccion}</td>
+                                    <td>{expediente.Tipo}</td>
+                                    <td>{expediente.inspector}</td>
+                                    <td>{expediente.fechaIngresoMesaPartes}</td>
+                                    <td>{expediente.fechaIngresoSGDC}</td>
+                                    <td>{expediente.fechaRecepcionInpeccion}</td>
+                                    <td>{expediente.recepcionLicenciaFuncionamiento}</td>
+                                    <td>{expediente.fechaLimiteInspeccion}</td>
+                                    <td>{expediente.numeroInforme}</td>
+                                    <td>{expediente.estado}</td>
+                                    <td>{expediente.fecha}</td>
+                                    <td>{expediente.hora}</td>
+                                    <td>{expediente.inspectores}</td>
+                                    <td>{expediente.ILO}</td>
+                                    <td><button id="showPopup" type="submit"><img src={editExpedienteIcon} alt="" /></button></td>
+                                    <td><button type="submit"><img src={inspeccionLocalIcon} alt="" /></button></td>
+                                    <td><button type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
+                                </tr>
+
+                            ))}
                         </tbody>
-                    </table> 
+                    </table>
                 </div>
                 <div className="overlay-expediente" id="overlay"></div>
                 <div className="popup-expediente" id="popup">
