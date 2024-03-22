@@ -4,18 +4,18 @@ import sendExpedienteIcon from "../../../../assets/image/expediente.png";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
 import { useEffect, useState } from "react";
 import useControlPage from "./useControlPage";
-
-
-
+import { initPopup, selectSearch } from '../../../../popups/popupControl'; 
 
 export const ControlPage = () => {
     const [data, setData] = useState([]);
     const [searchValue, setSearchValue] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
-    const { navegacionCierreSesion, navegacionProgramacion, navegacionExpediente, navegacionControl, controlList, findRazonSocial, findNumeroExpediente, findFuncion, findTipoItse } = useControlPage();
+    const { updateControl, navegacionCierreSesion, navegacionProgramacion, navegacionExpediente, navegacionControl, controlList, findRazonSocial, findNumeroExpediente, findFuncion, findTipoItse } = useControlPage();
 
     useEffect(() => {
         fetchData();
+        initPopup();
+        selectSearch();
     }, []);
 
     const fetchData = async () => {
@@ -98,6 +98,15 @@ export const ControlPage = () => {
         } 
     };
 
+    const handleSubmitUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        try {
+            await updateControl(datosFormulario, idRegistro); // Asegúrate de tener los datos correctos del formulario y el ID del registro.
+        } catch (error) {
+            console.error('Error al enviar el formulario de edición:', error);
+        }
+    };
+
 
     return (
         <div className="global-control">
@@ -129,15 +138,15 @@ export const ControlPage = () => {
                             <div className="dropdown">
                                 <button className="dropbtn">Tipo Busqueda</button>
                                 <div className="option-search">
-                                    <a href="#">Razon Social</a>
-                                    <a href="#">Expediente</a>
-                                    <a href="#">Funcion</a>
-                                    <a href="#">Tipo Itse</a>
+                                    <a id="btn-search-razon-social" href="#">Razon Social</a>
+                                    <a id="btn-search-expediente" href="#">Expediente</a>
+                                    <a id="btn-search-funcion" href="#">Funcion</a>
+                                    <a id="btn-search-tipo" href="#">Tipo Itse</a>
                                 </div>
                             </div>
                         </div>
                         <div className="tipos">
-                            <div className="razon-social">
+                            <div id="content-find-razon-social" className="razon-social">
                                 <form onSubmit={handleSubmitForRazonSocial} action="">
                                     <div className="input-group">
                                         <input type="text" placeholder="Razon Social/Nombre Comercial" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
@@ -145,7 +154,7 @@ export const ControlPage = () => {
                                     </div>
                                 </form>
                             </div>
-                            <div className="expediente">
+                            <div id="content-find-expediente" className="expediente">
                                 <form onSubmit={handleSubmitForNumeroExpediente} action="">
                                     <div className="input-group">
                                         <input type="text" placeholder="Numero de Expediente" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
@@ -153,11 +162,11 @@ export const ControlPage = () => {
                                     </div>
                                 </form>
                             </div>
-                            <div className="funcion">
+                            <div id="content-find-funcion" className="funcion">
                                 <form onSubmit={handleSubmitForFuncion} action="">
                                     <div className="input-group">
                                         <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
-                                            <option value="1">Seleccione Funcion</option>
+                                            <option value="" disabled>Seleccione Funcion</option>
                                             <option value="2">Encuentro</option>
                                             <option value="3">Comercio</option>
                                             <option value="4">Administrativa</option>
@@ -171,11 +180,11 @@ export const ControlPage = () => {
                                     </div>
                                 </form>
                             </div>
-                            <div className="tipo-itse">
+                            <div id="content-find-tipo" className="tipo-itse">
                                 <form onSubmit={handleSubmitForTipoItse} action="">
                                     <div className="input-group">
                                         <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
-                                            <option value="1">Tipo ITSE</option>
+                                            <option value="" disabled>Tipo ITSE</option>
                                             <option value="2">Previa</option>
                                             <option value="3">Posterior</option>
                                         </select>
@@ -187,9 +196,9 @@ export const ControlPage = () => {
                     </div>
 
                     <div className="nuevo-registro">
-                        <button id="showPopup" className="new-register">Nuevo Registro</button>
-                        <div className="overlay-control" id="overlay"></div>
-                        <div className="popup-control" id="popup">
+                        <button id="showPopup-control" className="new-register-control">Nuevo Registro</button>
+                        <div className="overlay-control" id="overlay-control"></div>
+                        <div className="popup-control" id="popup-control">
                             <h2>Nuevo Registro</h2>
                             <form id="form-new-register" action="#" method="post">
                                 <div className="content-form">
@@ -387,9 +396,7 @@ export const ControlPage = () => {
                                     <td><button type="submit"><img src={editExpedienteIcon} alt="" /></button></td>
                                     <td><button type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
                                 </tr>
-
                             ))}
-
                         </tbody>
                     </table>
                 </div>

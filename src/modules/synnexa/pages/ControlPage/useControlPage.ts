@@ -64,6 +64,15 @@ const useControlPage = () => {
         }
     };
 
+    const updateControl = async (datos = {}, id: string | number): Promise<void> => {
+        try {
+            const respuesta = await apiControlService.update(datos, id);
+            console.log(`Registro actualizado con éxito: ${respuesta.idControl}`);
+        } catch (error) {
+            console.error('Error al actualizar el registro:', error);
+        }
+    };
+
     return (
         {
             navegacionCierreSesion, 
@@ -74,7 +83,8 @@ const useControlPage = () => {
             findRazonSocial,
             findNumeroExpediente,
             findFuncion,
-            findTipoItse
+            findTipoItse,
+            updateControl
         }
     )
 }

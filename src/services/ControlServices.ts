@@ -68,16 +68,6 @@ class ControlServices extends Service {
         }
     }
 
-    async update(body = {}, id: string | number) {
-        try {
-            const url = `/api/v1/controles/${id}`;
-            return await this.http.put(url, body);
-        } catch (error: any) {
-            console.log(error.response);
-            return error.response;
-        }
-    }
-
 }
 
 export default ControlServices;

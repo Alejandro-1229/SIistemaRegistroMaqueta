@@ -1,5 +1,5 @@
 import ExpedienteServices from '@/services/ExpedienteServices';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const useExpedientePage = () => {
 
@@ -18,7 +18,7 @@ const useExpedientePage = () => {
     const navegacionControl = () => {
         navigate("/control");
     }
-    const expedienteList = async(): Promise<Object[]> => {
+    const expedienteList = async (): Promise<Object[]> => {
         try {
             const response = await apiExpedienteService.getAll();
             return response.data.data.Datos;
@@ -27,13 +27,23 @@ const useExpedientePage = () => {
         }
     };
 
+    const updateExpediente = async (datos = {}, id: string | number): Promise<void> => {
+        try {
+            const respuesta = await apiExpedienteService.update(datos, id);
+            console.log(`Registro actualizado con éxito: ${respuesta.idExpe}`);
+        } catch (error) {
+            console.error('Error al actualizar el registro:', error);
+        }
+    };
+
     return (
         {
-            navegacionCierreSesion, 
+            navegacionCierreSesion,
             navegacionProgramacion,
             navegacionExpediente,
             navegacionControl,
             expedienteList,
+            updateExpediente,
         }
     )
 }

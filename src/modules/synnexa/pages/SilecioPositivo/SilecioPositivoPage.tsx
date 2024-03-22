@@ -1,10 +1,31 @@
-import "./SilecioPositivo.scss";
+import "./SilecioPositivoPage.scss";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
 import imageCalendario from "../../../../assets/image/calendario.png";
 import imageEliminar from "../../../../assets/image/eliminar.png";
+import { useEffect, useState } from "react";
+import useSilencioPositivoPage from "./useSilencioPositivoPage";
 
 
-export const SilecioPositivo = () => {
+export const SilecioPositivoPage = () => {
+
+    const [data, setData] = useState([]);
+    const { silencioPositivoList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo } = useSilencioPositivoPage();
+
+
+    useEffect(() => {
+        listarSilenciosPositivos();
+    }, []);
+
+    const listarSilenciosPositivos = async () => {
+        try {
+            const silencioPositivo = await silencioPositivoList();
+            setData(silencioPositivo);
+        } catch (error) {
+            console.log("Error al listar los expedientes");
+        }
+    }
+
+
     return (
         <div className="global-silecio">
             <div className="header">
@@ -15,14 +36,14 @@ export const SilecioPositivo = () => {
                             <div>
                                 <h1>Sub Gerencia de Gestion del Riesgo de Desastres</h1>
                             </div>
-                            <div><a href="http://localhost:5173/">Cerrar Sesion</a></div>
+                            <div><a onClick={() => navegacionCierreSesion()}>Cerrar Sesion</a></div>
                         </div>
                     </div>
                 </div>
                 <nav id="menu">
                     <ul>
-                        <li><a href="http://localhost:5173/ingenieros">Inspecciones Semanales</a></li>
-                        <li><a href="http://localhost:5173/silecioPositivo">Silecio Positivo</a></li>
+                        <li><a onClick={() => navegacionIngenieros()}>Inspecciones Semanales</a></li>
+                        <li><a onClick={() => navegacionSilecioPositivo()}>Silecio Positivo</a></li>
                     </ul>
                 </nav>
             </div>
@@ -33,30 +54,25 @@ export const SilecioPositivo = () => {
                 <div id="box-table-silencio">
                     <table>
                         <thead>
-                            <th>Numero Expediente</th>
-                            <th>Encargado</th>
-                            <th>Local</th>
-                            <th>Fecha Establecida</th>
-                            <th colSpan={2}>Operaciones</th>
-
+                            <tr>
+                                <th>Numero Expediente</th>
+                                <th>Encargado</th>
+                                <th>Local</th>
+                                <th>Fecha Establecida</th>
+                                <th colSpan={2}>Operaciones</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>987ASD</td>
-                                <td>Ing Manuel Villar</td>
-                                <td>Cevicheria el Pulpo</td>
-                                <td>2024-05-02</td>
+                            {data.map(silencioPositivo => (
+                                <tr key={silencioPositivo.Prse}>
+                                <td>{silencioPositivo.numeroExp}</td>
+                                <td>{silencioPositivo.ingeniero_1}</td>
+                                <td>{silencioPositivo.local}</td>
+                                <td>{silencioPositivo.fechaInspeccion}</td>
                                 <td><button id="showPopup" type="submit"><img src={imageCalendario} alt="" /></button></td>
                                 <td><button type="submit"><img src={imageEliminar} alt="" /></button></td>
                             </tr>
-                            <tr>
-                                <td>9875QWEW</td>
-                                <td>Ing Manuel Villar</td>
-                                <td>Cevicheria el Pulpo</td>
-                                <td>2024-05-02</td>
-                                <td><button id="showPopup" type="submit"><img src={imageCalendario} alt="" /></button></td>
-                                <td><button type="submit"><img src={imageEliminar} alt="" /></button></td>
-                            </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

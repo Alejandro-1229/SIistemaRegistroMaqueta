@@ -5,7 +5,7 @@ import { ControlPage } from "@/modules/synnexa/pages/ControlPage/ControlPage";
 import { ExpedientePage } from "@/modules/synnexa/pages/ExpedientePage/ExpedientePage";
 import { ProgramacionPage } from "@/modules/synnexa/pages/ProgramacionPage/ProgramacionPage";
 import { IngenierosPage } from "@/modules/synnexa/pages/IngenierosPage/IngenierosPage";
-import { SilecioPositivo } from "@/modules/synnexa/pages/SilecioPositivo/SilecioPositivo";
+import { SilecioPositivoPage } from "@/modules/synnexa/pages/SilecioPositivo/SilecioPositivoPage";
 // import { LoginPage } from "@/modules/auth/pages/LoginPage/LoginPage";
 // import { LostPassword } from "@/modules/auth/pages/LostPassword/LostPassword";
 // import { RegisterPage } from "@/modules/auth/pages/RegisterPage/RegisterPage";
@@ -37,8 +37,8 @@ export const AppRouter = createBrowserRouter([
         element: <IngenierosPage />
       },
       {
-        path: 'silecioPositivo',
-        element: <SilecioPositivo />
+        path: 'silencioPositivo',
+        element: <SilecioPositivoPage />
       }
     ],
   },

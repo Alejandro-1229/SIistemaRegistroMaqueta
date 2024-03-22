@@ -5,11 +5,32 @@ import inspeccionLocalIcon from "../../../../assets/image/inspeccion-de-vivienda
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
 import { useEffect, useState } from "react";
 import useExpedientePage from "./useExpedientePage";
+import { Expediente } from "@/interfaces/Expediente";
 
 export const ExpedientePage = () => {
     const [data, setData] = useState([]);
     const { navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList } = useExpedientePage();
 
+
+    
+    const [isPopupExpediente, setIsPopupExpediente] = useState("popup-expediente--hide");
+    
+    const [isOverlayExpediente, setIsOverlayExpediente] = useState("overlay-expediente--hide");
+    
+    const [objExpediente, setObjExpediente] = useState<Expediente>({
+        idExpe: "",
+        fechaIngresoMP: "",
+        fechaSGDC: "",
+        fechaRecepcion: "",
+        fechaRecepcionLF: "",
+        fechaLimiteInspeccion: "",
+        numeroInforme: "",
+        estado: "",
+        fecha: "",
+        hora: "",
+        inspectores: "",
+        ilo: "",
+    });
 
     useEffect(() => {
         listarExpediente();
@@ -24,6 +45,30 @@ export const ExpedientePage = () => {
 
         }
     }
+    const handleInputsExpediente = (e:any) => {
+        const { name, value } = e.target;
+
+        setObjExpediente({
+            ...objExpediente,
+            [name]: value
+        });
+    }
+
+    const mostrarPopupExpediente = (paramExpediente:Expediente) => {
+            if (isPopupExpediente === "popup-expediente--hide") {
+                setIsPopupExpediente("popup-expediente--show");
+                setIsOverlayExpediente("overlay-expediente--show");
+                setObjExpediente(paramExpediente);
+            }
+        
+    }
+    const ocultarPopupExpediente = () =>{
+        if (isPopupExpediente === "popup-expediente--show") {
+            setIsPopupExpediente("popup-expediente--hide");
+            setIsOverlayExpediente("overlay-expediente--hide");
+        }
+    }
+
 
     return (
 
@@ -52,25 +97,26 @@ export const ExpedientePage = () => {
                 <div className="box-table">
                     <table>
                         <thead>
-                            <th>Numero Expediente</th>
-                            <th>RUC</th>
-                            <th>Nombre Comercial</th>
-                            <th>Direccion</th>
-                            <th>Tipo</th>
-                            <th>Inspector</th>
-                            <th>Fecha Ingreso Mesa de Partes</th>
-                            <th>Fecha Ingreso SGDC</th>
-                            <th>Fecha Recepcion Inspeccion</th>
-                            <th>Recepcion Licencia de Funcionamiento</th>
-                            <th>Fecha Limite Inspeccion</th>
-                            <th>Numero informe</th>
-                            <th>Estado</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Inspectores</th>
-                            <th>ILO</th>
-                            <th colSpan={3}>Operaciones</th>
-
+                            <tr>
+                                <th>Numero Expediente</th>
+                                <th>RUC</th>
+                                <th>Nombre Comercial</th>
+                                <th>Direccion</th>
+                                <th>Tipo</th>
+                                <th>Inspector</th>
+                                <th>Fecha Ingreso Mesa de Partes</th>
+                                <th>Fecha Ingreso SGDC</th>
+                                <th>Fecha Recepcion Inspeccion</th>
+                                <th>Recepcion Licencia de Funcionamiento</th>
+                                <th>Fecha Limite Inspeccion</th>
+                                <th>Numero informe</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Inspectores</th>
+                                <th>ILO</th>
+                                <th colSpan={3}>Operaciones</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {data.map(expediente => (
@@ -92,53 +138,53 @@ export const ExpedientePage = () => {
                                     <td>{expediente.hora}</td>
                                     <td>{expediente.inspectores}</td>
                                     <td>{expediente.ILO}</td>
-                                    <td><button id="showPopup" type="submit"><img src={editExpedienteIcon} alt="" /></button></td>
-                                    <td><button type="submit"><img src={inspeccionLocalIcon} alt="" /></button></td>
-                                    <td><button type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
+                                    <td><button id="showPopup-expediente" onClick={() => mostrarPopupExpediente(expediente)}><img src={editExpedienteIcon} alt="boton-editar-expediente" /></button></td>
+                                    <td><button type="submit"><img src={inspeccionLocalIcon} alt="boton-mandar-inspeccion" /></button></td>
+                                    <td><button type="submit"><img src={sendExpedienteIcon} alt="boton-enviar-programacion" /></button></td>
                                 </tr>
-
                             ))}
                         </tbody>
                     </table>
                 </div>
-                <div className="overlay-expediente" id="overlay"></div>
-                <div className="popup-expediente" id="popup">
+                <div className="overlay-expediente" id={isOverlayExpediente}></div>
+                <div className="popup-expediente" id={isPopupExpediente}>
                     <h2>Actualizar Expediente</h2>
                     <form id="form-update-expediente" action="#" method="post">
                         <div className="content-form">
                             <div className="datos-left">
                                 <label htmlFor="">Fecha Ingreso Mesa Partes</label>
-                                <input type="date" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="date" name="fechaIngresoMP" id="" value={objExpediente.fechaIngresoMP} />
                                 <label htmlFor="">Fecha Ingreso SGDC</label>
-                                <input type="date" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="date" name="fechaSGDC" id="" value={objExpediente.fechaSGDC} />
                                 <label htmlFor="">Fecha de Recepcion Inspeccion</label>
-                                <input type="date" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="date" name="fechaRecepcion" id="" value={objExpediente.fechaRecepcion} />
                                 <label htmlFor="">Recepcion de Licencia de Funcionamiento</label>
-                                <input type="date" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="date" name="fechaRecepcionLF" id="" value={objExpediente.fechaRecepcionLF} />
                                 <label htmlFor="">Fecha Limite Inspeccion</label>
-                                <input type="date" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="date" name="fechaLimiteInspeccion" id="" value={objExpediente.fechaLimiteInspeccion} />
                             </div>
                             <div className="datos-rigth">
                                 <label htmlFor="">N. Informe</label>
-                                <input type="tel" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="tel" name="numeroInforme" id="" value={objExpediente.numeroInforme} />
                                 <label htmlFor="">Estado</label>
-                                <select name="" id="">
-                                    <option value="1">-------</option>
+                                <select name="estado" id="" value={objExpediente.estado}>
+                                    <option value="" disabled>-------</option>
                                     <option value="2">Aprobado</option>
                                     <option value="3">Desaprobado</option>
                                 </select>
                                 <label htmlFor="">Fecha</label>
-                                <input type="date" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="date" name="fecha" id="" value={objExpediente.fecha} />
                                 <label htmlFor="">Hora</label>
-                                <input type="time" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="time" name="hora" id="" value={objExpediente.hora} />
                                 <label htmlFor="">Inspectores</label>
-                                <input type="text" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="text" name="inspectores" id="" value={objExpediente.inspectores} />
                                 <label htmlFor="">ILO</label>
-                                <input type="date" name="" id="" />
+                                <input onChange={handleInputsExpediente} type="date" name="ilo" id="" value={objExpediente.ilo} />
                             </div>
                         </div>
-                        <div className="buttons">
-                            <input type="submit" value="Guardar" />
+                        <div className="buttons-update-expediente">
+                            <input onChange={handleInputsExpediente} type="submit" value="Guardar" />
+                            <input type="button" onClick={() => ocultarPopupExpediente()} value="Cancelar" />
                         </div>
                     </form>
                 </div>

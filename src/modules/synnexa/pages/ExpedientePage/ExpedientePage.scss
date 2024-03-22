@@ -65,6 +65,19 @@ button img {
     /* Añadir scroll cuando el contenido excede el tamaño del popup */
 }
 
+#popup-expediente--show{
+    display: block;
+}
+#overlay-expediente--show{
+    display: block;
+}
+#overlay-expediente--hide{
+    display: none;
+}
+#popup-expediente--hide{
+    display: none;
+}
+
 .overlay-expediente {
     display: none;
     position: fixed;
@@ -109,4 +122,13 @@ form input {
 
 form select {
     height: 22px;
+}
+
+.buttons-update-expediente input[type=submit]{
+    margin: 10px;
+    width: max-content;
+}
+.buttons-update-expediente input[type=button]{
+    margin: 10px;
+    width: max-content;
 }

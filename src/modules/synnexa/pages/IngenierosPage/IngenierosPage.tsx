@@ -2,26 +2,68 @@ import "./IngenierosPage.scss";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
 import imageGuardar from "../../../../assets/image/guardar-el-archivo.png";
 import imageCalendario from "../../../../assets/image/calendario.png";
+import { selectSearch } from '../../../../popups/popupIngeniero'; 
+import useIngenierosPage from "./useIngenieroPage";
+import { useEffect, useState } from "react"; 
 
 export const IngenierosPage = () => {
+
+    const [data, setData] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
+    const { inspeccionSemanalList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo, findNumeroExpediente } = useIngenierosPage();
+    
+
+    useEffect(() => {
+        listarInspeccionesSemanales();
+        selectSearch();
+    }, []);
+
+    const listarInspeccionesSemanales = async () => { 
+        try {
+            const inspecciones = await inspeccionSemanalList();
+            setData(inspecciones);
+        } catch (error) {
+            console.log("Error al listar los expedientes");
+
+        }
+    };
+
+    const buscarNumeroExpediente = async (numeroExpediente: string) => {
+        try {
+            const elemento = await findNumeroExpediente(numeroExpediente);
+            setData(elemento);
+        } catch (error) {
+            console.error("Error searching element:", error);
+        }
+    };
+
+    const handleSubmitForNumeroExpediente = async (e) => {
+        e.preventDefault();
+        try {
+            await buscarNumeroExpediente(searchValue);
+        } catch (error) {
+            console.error("Error handling submit:", error);
+        }
+    };
+
     return (
         <div className="global-ingenieros">
             <div className="header">
                 <div className="global-content-header">
                     <div id="content-header">
-                        <div id="logo-muni"><img src={miImagen} alt="lpgo-subgerencia-riesgos-y-desastres" /></div>
+                        <div id="logo-muni"><img src={miImagen} alt="logo-subgerencia-riesgos-y-desastres" /></div>
                         <div id="tittle-muni">
                             <div>
                                 <h1>Sub Gerencia de Gestion del Riesgo de Desastres</h1>
                             </div>
-                            <div><a href="http://localhost:5173/">Cerrar Sesion</a></div>
+                            <div><a onClick={() => navegacionCierreSesion()}>Cerrar Sesion</a></div>
                         </div>
                     </div>
                 </div>
                 <nav id="menu">
                     <ul>
-                        <li><a href="http://localhost:5173/ingenieros">Inspecciones Semanales</a></li>
-                        <li><a href="http://localhost:5173/silecioPositivo">Silecio Positivo</a></li>
+                        <li><a onClick={() => navegacionIngenieros()}>Inspecciones Semanales</a></li>
+                        <li><a onClick={() => navegacionSilecioPositivo()}>Silecio Positivo</a></li>
                     </ul>
                 </nav>
             </div>
@@ -31,12 +73,13 @@ export const IngenierosPage = () => {
                         <div className="dropdown">
                             <button className="btn-drop">Tipo Busqueda</button>
                             <div className="option-search">
-                                <a href="#">Funcion</a>
-                                <a href="#">Expediente</a>
+                                    <a id="btn-search-razon-social" href="#">Razon Social</a>
+                                    <a id="btn-search-file" href="#">Expediente</a>
+                                    <a id="btn-search-function" href="#">Funcion</a>
                             </div>
                         </div> 
-                    </div> 
-                    <div className="search-function">
+                    </div>
+                    <div id="content-find-function" className="search-function-inspeccion">
                         <form id="find-function" action="">
                             <label htmlFor="">Funcion</label>
                             <select name="" id="">
@@ -57,9 +100,9 @@ export const IngenierosPage = () => {
                             <input type="submit" value="Buscar" />
                         </form>
                     </div>
-                    <div className="search-file">
-                        <form id="find-file" action="">
-                            <input type="text" name="" id="" placeholder="Numero de Expediente" />
+                    <div id="content-find-file" className="search-file-inspeccion">
+                        <form  onSubmit={handleSubmitForNumeroExpediente} id="find-file" action="">
+                            <input type="text" name="" id="" placeholder="Numero de Expediente" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
                             <input type="submit" value="Buscar" />
                         </form>
                     </div>
@@ -68,53 +111,39 @@ export const IngenierosPage = () => {
                 <div id="box-table-ing">
                     <table>
                         <thead>
-                            <th>Fecha</th>
-                            <th>Numero Expediente</th>
-                            <th>Local</th>
-                            <th>Funcion</th>
-                            <th>Direccion</th>
-                            <th>Ingeniero1</th>
-                            <th>Ingeniero 2</th>
-                            <th colSpan={3}>Operaciones</th>
-
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Numero Expediente</th>
+                                <th>Local</th>
+                                <th>Funcion</th>
+                                <th>Direccion</th>
+                                <th>Ingeniero1</th>
+                                <th>Ingeniero 2</th>
+                                <th colSpan={3}>Operaciones</th>
+                            </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>2024-05-02</td>
-                                <td>123ASD54</td>
-                                <td>Cevicheria el Pulpo</td>
-                                <td>Comercio</td>
-                                <td>Av. los Usares cerca a la piscina Mansiche</td>
-                                <td>Ing Manuel Villar</td>
-                                <td>Ing. Cesar Falla</td>
-                                <td>
-                                    <select name="" id="">
-                                        <option value="1">--------</option>
-                                        <option value="2">Aprobado</option>
-                                        <option value="3">Desaprobado</option>
-                                    </select>
-                                </td>
-                                <td><button type="submit"><img src={imageGuardar} alt="" /></button></td>
-                                <td><button id="showPopup" type="submit"><img src={imageCalendario} alt="" /></button></td>
-                            </tr>
-                            <tr>
-                                <td>2024-05-02</td>
-                                <td>123ASD54</td>
-                                <td>Cevicheria el Pulpo</td>
-                                <td>Comercio</td>
-                                <td>Av. los Usares cerca a la piscina Mansiche</td>
-                                <td>Ing Manuel Villar</td>
-                                <td>Ing. Cesar Falla</td>
-                                <td>
-                                    <select name="" id="">
-                                        <option value="1">--------</option>
-                                        <option value="2">Aprobado</option>
-                                        <option value="3">Desaprobado</option>
-                                    </select>
-                                </td>
-                                <td><button type="submit"><img src={imageGuardar} alt="" /></button></td>
-                                <td><button id="showPopup" type="submit"><img src={imageCalendario} alt="" /></button></td>
-                            </tr>
+                            {data.map(inspeccion => (
+                                <tr key={inspeccion.idPrSe}>
+                                    <td>{inspeccion.fechaInspeccion}</td>
+                                    <td>{inspeccion.numeroExp}</td>
+                                    <td>{inspeccion.local}</td>
+                                    <td>{inspeccion.funcs}</td>
+                                    <td>{inspeccion.direccion}</td>
+                                    <td>{inspeccion.ingeniero_1}</td>
+                                    <td>{inspeccion.ingeniero_2}</td>
+                                    <td>
+                                        <select name="" id="">
+                                            <option value=""selected disabled>--------</option>
+                                            <option value="2">Aprobado</option>
+                                            <option value="3">Desaprobado</option>
+                                        </select>
+                                    </td>
+                                    <td><button type="submit"><img src={imageGuardar} alt="" /></button></td>
+                                    <td><button id="showPopup" type="submit"><img src={imageCalendario} alt="" /></button></td>
+                                </tr>
+
+                            ))}
                         </tbody>
                     </table>
                 </div>

@@ -67,6 +67,7 @@
 
 #tittle-muni a:hover {
     color: rgb(255, 67, 67);
+    cursor: pointer;
 }
 
 #tittle-muni:nth-child(2) {
@@ -196,7 +197,7 @@
 
 /*BUSQUEDA POR ITSE*/
 .tipo-itse {
-    display: block;
+    display: none;
     width: 70%;
 }
 
@@ -247,7 +248,7 @@
 
 /*EDICION POP UP*/
 
-.new-register {
+.new-register-control {
     background-color: #005bc3;
     color: white;
     padding: 16px;
@@ -256,7 +257,7 @@
     cursor: pointer;
 }
 
-.new-register:hover {
+.new-register-control:hover {
     background-color: #275181;
 }
 
@@ -276,7 +277,6 @@
     overflow-y: auto;
     /* Añadir scroll cuando el contenido excede el tamaño del popup */
     width: 90%;
-    /* Usar porcentaje para el ancho */
     max-width: 400px;
     /* Ancho máximo para dispositivos grandes */
 }
