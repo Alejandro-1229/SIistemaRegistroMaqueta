@@ -2,23 +2,27 @@ import "./IngenierosPage.scss";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
 import imageGuardar from "../../../../assets/image/guardar-el-archivo.png";
 import imageCalendario from "../../../../assets/image/calendario.png";
-import { selectSearch } from '../../../../popups/popupIngeniero'; 
+import { selectSearch } from '../../../../popups/popupIngeniero';
 import useIngenierosPage from "./useIngenieroPage";
-import { useEffect, useState } from "react"; 
+import { useEffect, useState } from "react";
 
 export const IngenierosPage = () => {
 
     const [data, setData] = useState([]);
+    const [alertMessage, setAlertMessage] = useState('');
     const [searchValue, setSearchValue] = useState('');
-    const { inspeccionSemanalList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo, findNumeroExpediente } = useIngenierosPage();
-    
+    const [selectedValue, setSelectedValue] = useState('');
+    const [searchDate1, setSearchDate1] = useState('');
+    const [searchDate2, setSearchDate2] = useState('');
+    const { inspeccionSemanalList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo, findNumeroExpediente, findRazonSocial, findFuncion } = useIngenierosPage();
+
 
     useEffect(() => {
         listarInspeccionesSemanales();
         selectSearch();
     }, []);
 
-    const listarInspeccionesSemanales = async () => { 
+    const listarInspeccionesSemanales = async () => {
         try {
             const inspecciones = await inspeccionSemanalList();
             setData(inspecciones);
@@ -31,9 +35,56 @@ export const IngenierosPage = () => {
     const buscarNumeroExpediente = async (numeroExpediente: string) => {
         try {
             const elemento = await findNumeroExpediente(numeroExpediente);
-            setData(elemento);
+            if (Array.isArray(elemento) && elemento.length > 0) {
+                setData(elemento);
+                setAlertMessage('');
+            } else {
+                setAlertMessage('No se encontraron resultados.');
+            }
         } catch (error) {
             console.error("Error searching element:", error);
+            setAlertMessage('Error al buscar el elemento.');
+        }
+    };
+    const buscarLocal = async (nombreComercial: string) => {
+        try {
+            const elemento = await findRazonSocial(nombreComercial);
+            if (Array.isArray(elemento) && elemento.length > 0) {
+                setData(elemento);
+                setAlertMessage('');
+            } else {
+                setAlertMessage('No se encontraron resultados con ese nombre.');
+            }
+        } catch (error) {
+            console.error("Error searching element:", error);
+            setAlertMessage('Error al buscar el elemento.');
+        }
+    };
+
+    const buscarFuncion = async (funcion: string, fechaInicio: string, fechaFinal: string) => {
+        try {
+            const elementos = await findFuncion(funcion, fechaInicio, fechaFinal);
+            setData(elementos);
+        } catch (error) {
+            console.error("Error searching element:", error);
+        }
+    }
+    const handleSubmitForFunction = async (e) => {
+        e.preventDefault();
+        try {
+            await buscarFuncion(selectedValue, searchDate1, searchDate2); 
+            
+        } catch (error) {
+            console.error("Error handling submit:", error);
+        }
+    };
+
+    const handleSubmitForRazonSocial = async (e) => {
+        e.preventDefault();
+        try {
+            await buscarLocal(searchValue);
+        } catch (error) {
+            console.error("Error handling submit:", error);
         }
     };
 
@@ -73,42 +124,59 @@ export const IngenierosPage = () => {
                         <div className="dropdown">
                             <button className="btn-drop">Tipo Busqueda</button>
                             <div className="option-search">
-                                    <a id="btn-search-razon-social" href="#">Razon Social</a>
-                                    <a id="btn-search-file" href="#">Expediente</a>
-                                    <a id="btn-search-function" href="#">Funcion</a>
+                                <a id="btn-search-razon-social" href="#">Razon Social</a>
+                                <a id="btn-search-file" href="#">Expediente</a>
+                                <a id="btn-search-function" href="#">Funcion</a>
                             </div>
-                        </div> 
+                        </div>
                     </div>
-                    <div id="content-find-function" className="search-function-inspeccion">
-                        <form id="find-function" action="">
-                            <label htmlFor="">Funcion</label>
-                            <select name="" id="">
-                                <option value="1">-------</option>
-                                <option value="2">Encuentro</option>
-                                <option value="3">Comercio</option>
-                                <option value="4">Administrativa</option>
-                                <option value="5">Almacen</option>
-                                <option value="6">Industrial</option>
-                                <option value="7">Educacion</option>
-                                <option value="8">Hospedaje</option>
-                                <option value="9">Salud</option>
-                            </select>
-                            <label htmlFor="">Fecha Inicio</label>
-                            <input type="date" name="" id="" />
-                            <label htmlFor="">Fecha Final</label>
-                            <input type="date" name="" id="" />
-                            <input type="submit" value="Buscar" />
-                        </form>
-                    </div>
-                    <div id="content-find-file" className="search-file-inspeccion">
-                        <form  onSubmit={handleSubmitForNumeroExpediente} id="find-file" action="">
-                            <input type="text" name="" id="" placeholder="Numero de Expediente" value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
-                            <input type="submit" value="Buscar" />
-                        </form>
+                    <div className="tipo-filtros">
+                        <div id="content-find-razon-social" className="search-razonSocial-inspeccion">
+                            <form onSubmit={handleSubmitForRazonSocial} action="">
+                                <div className="input-group-inspeccion">
+                                    <input type="text" autoFocus placeholder="Razon Social/Nombre Comercial" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                                    <input type="submit" value="Buscar" />
+                                </div>
+                            </form>
+                            {alertMessage && <p>{alertMessage}</p>}
+                        </div>
+                        <div id="content-find-function" className="search-function-inspeccion">
+                            <form onSubmit={handleSubmitForFunction} action="">
+                                <div className="input-group-inspeccion">
+                                    <label htmlFor="">Funcion</label>
+                                    <select name="" id="" onChange={(e) => setSelectedValue(e.target.value)} required>
+                                        <option value="" selected disabled></option>
+                                        <option value="Encuentro">Encuentro</option>
+                                        <option value="Comercio">Comercio</option>
+                                        <option value="Administrativa">Administrativa</option>
+                                        <option value="Almacen">Almacen</option>
+                                        <option value="Industrial">Industrial</option>
+                                        <option value="Educacion">Educacion</option>
+                                        <option value="Hospedaje">Hospedaje</option>
+                                        <option value="Salud">Salud</option>
+                                    </select>
+                                    <label htmlFor="">Fecha Inicio</label>
+                                    <input onChange={(e) => setSearchDate1(e.target.value)} type="date" name="" id="" required />
+                                    <label htmlFor="">Fecha Final</label>
+                                    <input onChange={(e) => setSearchDate2(e.target.value)} type="date" name="" id="" required />
+                                    <input type="submit" value="Buscar" />
+                                </div>
+                            </form>
+                        </div>
+                        <div id="content-find-file" className="search-file-inspeccion">
+                            <form onSubmit={handleSubmitForNumeroExpediente} id="find-file" action="">
+                                <div className="input-group-inspeccion">
+                                    <input type="text" name="" id="" placeholder="Numero de Expediente" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                                    <input type="submit" value="Buscar" />
+                                </div>
+                            </form>
+                            {alertMessage && <p>{alertMessage}</p>}
+                        </div>
+
                     </div>
                 </div>
 
-                <div id="box-table-ing">
+                <div className="box-table-ing">
                     <table>
                         <thead>
                             <tr>
@@ -134,7 +202,7 @@ export const IngenierosPage = () => {
                                     <td>{inspeccion.ingeniero_2}</td>
                                     <td>
                                         <select name="" id="">
-                                            <option value=""selected disabled>--------</option>
+                                            <option value="" selected disabled>--------</option>
                                             <option value="2">Aprobado</option>
                                             <option value="3">Desaprobado</option>
                                         </select>

@@ -23,7 +23,7 @@ const useIngenierosPage = () => {
         } catch (error) {
             throw new Error('Error al buscar expedientes: ' + error);
         }
-    };
+    }
 
     const findNumeroExpediente = async(findNumeroExpediente: string): Promise<Object[]> => {
         try {
@@ -31,8 +31,28 @@ const useIngenierosPage = () => {
             return response.data.data;
         } catch (error) {
             throw new Error('Error al buscar el elemento: ' + error);
+        } 
+    }
+
+    const findRazonSocial = async(razonSocial: string): Promise<Object[]> => {
+        try {
+            const response = await apiIngenieroService.filtroRazonSocial(razonSocial);
+            return response.data.data;
+        } catch (error) {
+            throw new Error('Error al buscar el elemento: ' + error);
         }
-    };
+    }
+    
+    const findFuncion = async (funcion: string, fechaInicio: string, fechaFinal: string) => {
+
+        try {
+            const response = await apiIngenieroService.filtroFuncion(funcion, fechaInicio, fechaFinal);
+            return response.data.data.listado;
+        } catch (error) {
+            throw new Error('Error al buscar el elemento: ' + error);
+        }
+
+    }
 
 
 
@@ -43,6 +63,8 @@ const useIngenierosPage = () => {
             navegacionSilecioPositivo,
             inspeccionSemanalList,
             findNumeroExpediente,
+            findRazonSocial,
+            findFuncion,
         }
     ) 
 }

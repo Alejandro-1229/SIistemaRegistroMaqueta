@@ -7,7 +7,7 @@ const useControlPage = () => {
     const apiControlService = new ControlService();
 
     const navegacionCierreSesion = () => {
-        navigate("/");
+        navigate("/"); 
     }
     const navegacionProgramacion = () => {
         navigate("/programacion");
@@ -46,24 +46,35 @@ const useControlPage = () => {
         }
     };
 
-    const findFuncion = async(findFuncion: string | number): Promise<Object[]> => {
+    const findFuncion = async(findFuncion: string | number, fechaInicio: string, fechaFinal: string): Promise<Object[]> => {
         try {
-            const response = await apiControlService.filtroFuncion(findFuncion);
+            const response = await apiControlService.filtroFuncion(findFuncion,fechaInicio,fechaFinal);
             return response.data.data.datosObtenidos;
         } catch (error) {
             throw new Error('Error al buscar el elemento: ' + error);
         }
     };
 
-    const findTipoItse = async(findTipoItse: string | number): Promise<Object[]> => {
+    const findTipoItse = async(findTipoItse: string | number, fechaInicio: string, fechaFinal: string): Promise<Object[]> => {
         try {
-            const response = await apiControlService.filtroTipoItse(findTipoItse);
-            return response.data.data.Datos;
+            const response = await apiControlService.filtroTipoItse(findTipoItse,fechaInicio,fechaFinal);
+            return response.data.data.Datos
         } catch (error) {
             throw new Error('Error al buscar el elemento: ' + error);
         }
     };
-
+    /*
+    const cantidadElementos = async(findTipoItse: string | number, fechaInicio :Date, fechaFinal : Date): Promise<Object[]> => {
+        try {
+            const response = await apiControlService.filtroTipoItse(findTipoItse,fechaInicio,fechaFinal);
+            return response.data.data.cantidadRegistros
+        } catch (error) {
+            throw new Error('Error al buscar el elemento: ' + error);
+        }
+    };
+    */
+    
+/*
     const updateControl = async (datos = {}, id: string | number): Promise<void> => {
         try {
             const respuesta = await apiControlService.update(datos, id);
@@ -72,7 +83,7 @@ const useControlPage = () => {
             console.error('Error al actualizar el registro:', error);
         }
     };
-
+*/
     return (
         {
             navegacionCierreSesion, 
@@ -84,7 +95,8 @@ const useControlPage = () => {
             findNumeroExpediente,
             findFuncion,
             findTipoItse,
-            updateControl
+            //cantidadElementos
+            //updateControl
         }
     )
 }

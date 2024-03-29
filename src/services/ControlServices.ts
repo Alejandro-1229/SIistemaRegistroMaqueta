@@ -8,7 +8,7 @@ class ControlServices extends Service {
         } catch (error: any) {
             console.log(error.response);
             return error.response;
-        }
+        } 
     }
     async crateControl(body = {}) {
         try {
@@ -18,6 +18,7 @@ class ControlServices extends Service {
             return error.response;
         }
     }
+
     async filtroId(id: string | number) {
         try {
             const url = `/api/v1/controles/filterId/${id}`;
@@ -38,9 +39,9 @@ class ControlServices extends Service {
         }
     }
 
-    async filtroFuncion(idFuncion: string | number) {
+    async filtroFuncion(idFuncion: string | number, fechaInicio: string, fechaFinal: string) {
         try {
-            const url = `/api/v1/controles/filterFuncion/${idFuncion}`;
+            const url = `/api/v1/controles/filterFuncion/${idFuncion}/${fechaInicio}/${fechaFinal}`;
             return await this.http.get(url);
         } catch (error: any) {
             console.log(error.response);
@@ -58,9 +59,9 @@ class ControlServices extends Service {
         }
     }
 
-    async filtroTipoItse(tipoItse: string | number) {
+    async filtroTipoItse(tipoItse: string | number, fechaInicio: string, fechaFinal: string) {
         try {
-            const url = `/api/v1/controles/filterTipoItse/${tipoItse}`;
+            const url = `/api/v1/controles/filterTipoItse/${tipoItse}/${fechaInicio}/${fechaFinal}`;
             return await this.http.get(url);
         } catch (error: any) {
             console.log(error.response);
