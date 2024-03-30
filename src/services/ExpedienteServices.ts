@@ -20,5 +20,13 @@ class ExpedenteServices extends Service {
         }
     }
 
+    async createProgramacion (id: string | number) {
+        try {
+            const url = `/api/v1/programaciones/`;
+            return await this.http.post(url, { "idExpediente": id });
+        } catch (error) {
+            console.error('Error al enviar elemento a programación:', error);
+        }
+    };
 }
 export default ExpedenteServices;

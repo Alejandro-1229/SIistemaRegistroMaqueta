@@ -9,16 +9,17 @@ import { Expediente } from "@/interfaces/Expediente";
 
 export const ExpedientePage = () => {
     const [data, setData] = useState([]);
-    const { navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList } = useExpedientePage();
+    const { crearProgramacion, navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList } = useExpedientePage();
 
 
-    
+
     const [isPopupExpediente, setIsPopupExpediente] = useState("popup-expediente--hide");
-    
+
     const [isOverlayExpediente, setIsOverlayExpediente] = useState("overlay-expediente--hide");
-    
+
     const [objExpediente, setObjExpediente] = useState<Expediente>({
         idExpe: "",
+        ruc: "",
         fechaIngresoMP: "",
         fechaSGDC: "",
         fechaRecepcion: "",
@@ -45,7 +46,7 @@ export const ExpedientePage = () => {
 
         }
     }
-    const handleInputsExpediente = (e:any) => {
+    const handleInputsExpediente = (e: any) => {
         const { name, value } = e.target;
 
         setObjExpediente({
@@ -54,15 +55,27 @@ export const ExpedientePage = () => {
         });
     }
 
-    const mostrarPopupExpediente = (paramExpediente:Expediente) => {
-            if (isPopupExpediente === "popup-expediente--hide") {
-                setIsPopupExpediente("popup-expediente--show");
-                setIsOverlayExpediente("overlay-expediente--show");
-                setObjExpediente(paramExpediente);
-            }
-        
+    const mandarProgramacion = async (id: any) => {
+        try {
+            await crearProgramacion(id);
+            console.log(id);
+
+        } catch (error) {
+            console.log("Error al listar los expedientes");
+
+        }
     }
-    const ocultarPopupExpediente = () =>{
+
+
+    const mostrarPopupExpediente = (paramExpediente: Expediente) => {
+        if (isPopupExpediente === "popup-expediente--hide") {
+            setIsPopupExpediente("popup-expediente--show");
+            setIsOverlayExpediente("overlay-expediente--show");
+            setObjExpediente(paramExpediente);
+        }
+
+    }
+    const ocultarPopupExpediente = () => {
         if (isPopupExpediente === "popup-expediente--show") {
             setIsPopupExpediente("popup-expediente--hide");
             setIsOverlayExpediente("overlay-expediente--hide");
@@ -140,7 +153,7 @@ export const ExpedientePage = () => {
                                     <td>{expediente.ILO}</td>
                                     <td><button id="showPopup-expediente" onClick={() => mostrarPopupExpediente(expediente)}><img src={editExpedienteIcon} alt="boton-editar-expediente" /></button></td>
                                     <td><button type="submit"><img src={inspeccionLocalIcon} alt="boton-mandar-inspeccion" /></button></td>
-                                    <td><button type="submit"><img src={sendExpedienteIcon} alt="boton-enviar-programacion" /></button></td>
+                                    <td><button onClick={() => mandarProgramacion(expediente.idExpe)}><img src={sendExpedienteIcon} alt="boton-enviar-programacion" /></button></td>
                                 </tr>
                             ))}
                         </tbody>
@@ -164,6 +177,9 @@ export const ExpedientePage = () => {
                                 <input onChange={handleInputsExpediente} type="date" name="fechaLimiteInspeccion" id="" value={objExpediente.fechaLimiteInspeccion} />
                             </div>
                             <div className="datos-rigth">
+
+                                <label htmlFor="">Ruc</label>
+                                <input onChange={handleInputsExpediente} type="text" name="ruc" id="" value={objExpediente.ruc} />
                                 <label htmlFor="">N. Informe</label>
                                 <input onChange={handleInputsExpediente} type="tel" name="numeroInforme" id="" value={objExpediente.numeroInforme} />
                                 <label htmlFor="">Estado</label>

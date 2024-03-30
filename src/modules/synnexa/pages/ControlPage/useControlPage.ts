@@ -63,6 +63,15 @@ const useControlPage = () => {
             throw new Error('Error al buscar el elemento: ' + error);
         }
     };
+
+    const crearExpediente = async ( id: string | number): Promise<void> => {
+        try {
+            await apiControlService.createExpediente(id);
+            
+        } catch (error) {
+            console.error('Error al enviar el registro:', error);
+        }
+    };
     /*
     const cantidadElementos = async(findTipoItse: string | number, fechaInicio :Date, fechaFinal : Date): Promise<Object[]> => {
         try {
@@ -95,6 +104,7 @@ const useControlPage = () => {
             findNumeroExpediente,
             findFuncion,
             findTipoItse,
+            crearExpediente
             //cantidadElementos
             //updateControl
         }

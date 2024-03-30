@@ -68,6 +68,14 @@ class ControlServices extends Service {
             return error.response;
         }
     }
+    async createExpediente (id: string | number) {
+        try {
+            const url = `/api/v1/expedientes/`;
+            return await this.http.post(url, { "idControl": id });
+        } catch (error) {
+            console.error('Error al enviar elemento a expediente:', error);
+        }
+    };
 
 }
 

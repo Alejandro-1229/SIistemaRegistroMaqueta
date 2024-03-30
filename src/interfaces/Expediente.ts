@@ -1,5 +1,6 @@
 export interface Expediente{
     idExpe: "",
+    ruc:"",
     fechaIngresoMP: "",
     fechaSGDC: "",
     fechaRecepcion: "",

@@ -66,7 +66,7 @@ export const ProgramacionPage = () => {
                             {data.map(programacion => (
                                 <tr key={programacion.idProg}>
                                     <td>{programacion.numeroExpediente}</td>
-                                    <td>ruc</td>
+                                    <td>{programacion.ruc}</td>
                                     <td>{programacion.nombreComercial}</td>
                                     <td>{programacion.direccion}</td>
                                     <td>{programacion.Tipo}</td>

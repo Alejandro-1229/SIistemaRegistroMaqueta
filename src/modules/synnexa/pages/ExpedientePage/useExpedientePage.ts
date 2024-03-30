@@ -36,6 +36,14 @@ const useExpedientePage = () => {
         }
     };
 
+    const crearProgramacion = async ( id: string | number): Promise<void> => {
+        try {
+            await apiExpedienteService.createProgramacion(id);
+        } catch (error) {
+            console.error('Error al enviar el registro:', error);
+        }
+    };
+
     return (
         {
             navegacionCierreSesion,
@@ -44,6 +52,7 @@ const useExpedientePage = () => {
             navegacionControl,
             expedienteList,
             updateExpediente,
+            crearProgramacion
         }
     )
 }

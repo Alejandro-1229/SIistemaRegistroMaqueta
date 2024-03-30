@@ -15,7 +15,7 @@ export const ControlPage = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertMessage2, setAlertMessage2] = useState('');
     const [selectedOption, setSelectedOption] = useState('');
-    const { navegacionCierreSesion, navegacionProgramacion, navegacionExpediente, navegacionControl, controlList, findRazonSocial, findNumeroExpediente, findFuncion, findTipoItse } = useControlPage();
+    const { crearExpediente ,navegacionCierreSesion, navegacionProgramacion, navegacionExpediente, navegacionControl, controlList, findRazonSocial, findNumeroExpediente, findFuncion, findTipoItse } = useControlPage();
 
     useEffect(() => {
         fetchData();
@@ -31,6 +31,17 @@ export const ControlPage = () => {
             console.error("Error fetching data:", error);
         }
     };
+
+    const mandarExpediente = async (id:any) => {
+        try {
+            await crearExpediente(id);
+            console.log(id);
+            
+        } catch (error) {
+            console.log("Error al listar los expedientes");
+
+        }
+    }
 
     const buscarLocal = async (nombreComercial: string) => {
         try {
@@ -388,7 +399,8 @@ export const ControlPage = () => {
                                     <td>{control.nivelRiesgo}</td>
                                     <td>{control.nombreComercial}</td>
                                     <td>{control.giroNegocio}</td>
-                                    <td>{control.datosSolicitante}</td>                                    <td>{control.fechaIngreso}</td>
+                                    <td>{control.datosSolicitante}</td>                                    
+                                    <td>{control.fechaIngreso}</td>
                                     <td>{control.fechaIngresoSGDC}</td>
                                     <td>{control.barrio}</td>
                                     <td>{control.nombreHabilitacionUrbana}</td>
@@ -417,7 +429,7 @@ export const ControlPage = () => {
                                     <td>{control.areaRecepcion}</td>
                                     <td>{control.pagoDerechoInspeccion}</td>
                                     <td><button type="submit"><img src={editExpedienteIcon} alt="" /></button></td>
-                                    <td><button type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
+                                    <td><button onClick={() => crearExpediente(control.idControl)} type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
                                 </tr>
                             ))}
                         </tbody>
