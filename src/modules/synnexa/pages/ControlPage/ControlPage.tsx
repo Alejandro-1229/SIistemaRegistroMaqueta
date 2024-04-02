@@ -428,8 +428,8 @@ export const ControlPage = () => {
                                     <td>{control.numeroObservaciones}</td>
                                     <td>{control.areaRecepcion}</td>
                                     <td>{control.pagoDerechoInspeccion}</td>
-                                    <td><button type="submit"><img src={editExpedienteIcon} alt="" /></button></td>
-                                    <td><button onClick={() => crearExpediente(control.idControl)} type="submit"><img src={sendExpedienteIcon} alt="" /></button></td>
+                                    <td><button type="submit"><img src={editExpedienteIcon} alt="Editar Registro" title="Editar Registro"/></button></td>
+                                    <td><button onClick={() => crearExpediente(control.idControl)} type="submit"><img src={sendExpedienteIcon} alt="Mandar a Expediente" title="Enviar a Expediente"/></button></td>
                                 </tr>
                             ))}
                         </tbody>

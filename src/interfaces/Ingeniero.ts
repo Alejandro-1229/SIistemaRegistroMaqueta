@@ -1,4 +1,5 @@
-export interface SearchElement {
-    buttonId: string;
-    contentIds: string[];
+export interface Ingeniero {
+    idPrSe: "",
+    fechaActualizada: "",
+    idRazon: ""
 }

@@ -56,7 +56,7 @@
 }
 
 
-/*BUSQUEDAS FUNCION Y EXPEDIENTES*/
+/*BUSQUEDAS FUNCION Y ingenierosS*/
 
 
 .tipo-filtros {
@@ -209,6 +209,19 @@ button img {
     /* Añadir scroll cuando el contenido excede el tamaño del popup */
 }
 
+#popup-ingenieros--show{
+    display: block;
+}
+#overlay-ingenieros--show{
+    display: block;
+}
+#overlay-ingenieros--hide{
+    display: none;
+}
+#popup-ingenieros--hide{
+    display: none;
+}
+
 .overlay-ingenieros {
     display: none;
     position: fixed;
@@ -246,8 +259,11 @@ form {
     margin-top: 10px;
 }
 
-.buttons input[type=submit] {
-    padding: 5px 10px;
-    height: 30px;
-    width: 80px;
+.buttons-update-ingenieros input[type=submit]{
+    margin: 10px;
+    width: max-content;
+}
+.buttons-update-ingenieros input[type=button]{
+    margin: 10px;
+    width: max-content;
 }

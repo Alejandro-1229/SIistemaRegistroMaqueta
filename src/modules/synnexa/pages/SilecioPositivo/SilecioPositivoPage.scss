@@ -63,7 +63,18 @@ button img {
     z-index: 9999;
     /* Añadir scroll cuando el contenido excede el tamaño del popup */
 }
-
+#popup-silencioPositivo--show{
+    display: block;
+}
+#overlay-silencioPositivo--show{
+    display: block;
+}
+#overlay-silencioPositivo--hide{
+    display: none;
+}
+#popup-silencioPositivo--hide{
+    display: none;
+}
 .overlay-silencio {
     display: none;
     position: fixed;

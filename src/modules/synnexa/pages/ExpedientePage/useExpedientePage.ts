@@ -44,6 +44,14 @@ const useExpedientePage = () => {
         }
     };
 
+    const crearInspeccion = async ( id: string | number): Promise<void> => {
+        try {
+            await apiExpedienteService.createInspeccion(id);
+        } catch (error) {
+            console.error('Error al enviar el registro:', error);
+        }
+    };
+
     return (
         {
             navegacionCierreSesion,
@@ -52,7 +60,8 @@ const useExpedientePage = () => {
             navegacionControl,
             expedienteList,
             updateExpediente,
-            crearProgramacion
+            crearProgramacion,
+            crearInspeccion
         }
     )
 }

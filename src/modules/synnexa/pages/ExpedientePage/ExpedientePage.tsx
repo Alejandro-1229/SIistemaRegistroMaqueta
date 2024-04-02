@@ -6,12 +6,12 @@ import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-prev
 import { useEffect, useState } from "react";
 import useExpedientePage from "./useExpedientePage";
 import { Expediente } from "@/interfaces/Expediente";
+import axios from "axios";
 
 export const ExpedientePage = () => {
     const [data, setData] = useState([]);
-    const { crearProgramacion, navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList } = useExpedientePage();
-
-
+    
+    const { crearInspeccion, crearProgramacion, navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList } = useExpedientePage();
 
     const [isPopupExpediente, setIsPopupExpediente] = useState("popup-expediente--hide");
 
@@ -20,17 +20,15 @@ export const ExpedientePage = () => {
     const [objExpediente, setObjExpediente] = useState<Expediente>({
         idExpe: "",
         ruc: "",
-        fechaIngresoMP: "",
-        fechaSGDC: "",
-        fechaRecepcion: "",
-        fechaRecepcionLF: "",
+        fechaIngresoMesaPartes: "",
+        fechaRecepcionInspeccion: "",
+        recepcionLicenciaFuncionamiento: "",
         fechaLimiteInspeccion: "",
         numeroInforme: "",
-        estado: "",
+        idEstado: "",
         fecha: "",
         hora: "",
-        inspectores: "",
-        ilo: "",
+        ILO: "",
     });
 
     useEffect(() => {
@@ -46,7 +44,7 @@ export const ExpedientePage = () => {
 
         }
     }
-    const handleInputsExpediente = (e: any) => {
+    const handleInputsExpediente = (e) => {
         const { name, value } = e.target;
 
         setObjExpediente({
@@ -55,17 +53,51 @@ export const ExpedientePage = () => {
         });
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const cuerpo = {
+            ruc: objExpediente.ruc,
+            fechaIngresoMesaPartes: objExpediente.fechaIngresoMesaPartes,
+            fechaRecepcionInspeccion: objExpediente.fechaRecepcionInspeccion,
+            recepcionLicenciaFuncionamiento: objExpediente.recepcionLicenciaFuncionamiento,
+            fechaLimiteInspeccion: objExpediente.fechaLimiteInspeccion,
+            numeroInforme: objExpediente.numeroInforme,
+            idEstado: objExpediente.idEstado,
+            fecha: objExpediente.fecha,
+            hora: objExpediente.hora,
+            ILO: objExpediente.ILO,
+          };
+            
+            await axios.put(`http://localhost:8000/api/v1/expedientes/${objExpediente.idExpe}`, cuerpo);
+            ocultarPopupExpediente();
+            window.location.reload();
+        } catch (error) {
+            console.error('Error al actualizar el expediente:', error);
+        }
+    };
+
     const mandarProgramacion = async (id: any) => {
         try {
             await crearProgramacion(id);
             console.log(id);
 
         } catch (error) {
-            console.log("Error al listar los expedientes");
+            console.log("Error al enviar a prorgamacion");
 
         }
     }
 
+    const mandarInspeccion = async (id: any) => {
+        try {
+            await crearInspeccion(id);
+            console.log(id);
+
+        } catch (error) {
+            console.log("Error al eviar a inspeccion");
+
+        }
+    }
 
     const mostrarPopupExpediente = (paramExpediente: Expediente) => {
         if (isPopupExpediente === "popup-expediente--hide") {
@@ -75,6 +107,7 @@ export const ExpedientePage = () => {
         }
 
     }
+
     const ocultarPopupExpediente = () => {
         if (isPopupExpediente === "popup-expediente--show") {
             setIsPopupExpediente("popup-expediente--hide");
@@ -142,7 +175,7 @@ export const ExpedientePage = () => {
                                     <td>{expediente.inspector}</td>
                                     <td>{expediente.fechaIngresoMesaPartes}</td>
                                     <td>{expediente.fechaIngresoSGDC}</td>
-                                    <td>{expediente.fechaRecepcionInpeccion}</td>
+                                    <td>{expediente.fechaRecepcionInspeccion}</td>
                                     <td>{expediente.recepcionLicenciaFuncionamiento}</td>
                                     <td>{expediente.fechaLimiteInspeccion}</td>
                                     <td>{expediente.numeroInforme}</td>
@@ -151,9 +184,9 @@ export const ExpedientePage = () => {
                                     <td>{expediente.hora}</td>
                                     <td>{expediente.inspectores}</td>
                                     <td>{expediente.ILO}</td>
-                                    <td><button id="showPopup-expediente" onClick={() => mostrarPopupExpediente(expediente)}><img src={editExpedienteIcon} alt="boton-editar-expediente" /></button></td>
-                                    <td><button type="submit"><img src={inspeccionLocalIcon} alt="boton-mandar-inspeccion" /></button></td>
-                                    <td><button onClick={() => mandarProgramacion(expediente.idExpe)}><img src={sendExpedienteIcon} alt="boton-enviar-programacion" /></button></td>
+                                    <td><button onClick={() => mostrarPopupExpediente(expediente)}><img src={editExpedienteIcon} alt="boton-editar-expediente" title="Editar"/></button></td>
+                                    <td><button onClick={() => mandarInspeccion(expediente.idExpe)}><img src={inspeccionLocalIcon} alt="boton-mandar-inspeccion" title="Mandar a inspeccion"/></button></td>
+                                    <td><button onClick={() => mandarProgramacion(expediente.idExpe)}><img src={sendExpedienteIcon} alt="boton-enviar-programacion" title="Enviar a programacion"/></button></td>
                                 </tr>
                             ))}
                         </tbody>
@@ -162,29 +195,27 @@ export const ExpedientePage = () => {
                 <div className="overlay-expediente" id={isOverlayExpediente}></div>
                 <div className="popup-expediente" id={isPopupExpediente}>
                     <h2>Actualizar Expediente</h2>
-                    <form id="form-update-expediente" action="#" method="post">
+                    <form id="form-update-expediente" onSubmit={handleSubmit}>
                         <div className="content-form">
                             <div className="datos-left">
                                 <label htmlFor="">Fecha Ingreso Mesa Partes</label>
-                                <input onChange={handleInputsExpediente} type="date" name="fechaIngresoMP" id="" value={objExpediente.fechaIngresoMP} />
-                                <label htmlFor="">Fecha Ingreso SGDC</label>
-                                <input onChange={handleInputsExpediente} type="date" name="fechaSGDC" id="" value={objExpediente.fechaSGDC} />
-                                <label htmlFor="">Fecha de Recepcion Inspeccion</label>
-                                <input onChange={handleInputsExpediente} type="date" name="fechaRecepcion" id="" value={objExpediente.fechaRecepcion} />
+                                <input onChange={handleInputsExpediente} type="date" name="fechaIngresoMesaPartes" id="" value={objExpediente.fechaIngresoMesaPartes} />
                                 <label htmlFor="">Recepcion de Licencia de Funcionamiento</label>
-                                <input onChange={handleInputsExpediente} type="date" name="fechaRecepcionLF" id="" value={objExpediente.fechaRecepcionLF} />
+                                <input onChange={handleInputsExpediente} type="date" name="recepcionLicenciaFuncionamiento" id="" value={objExpediente.recepcionLicenciaFuncionamiento} />                                
+                                <label htmlFor="">Fecha de Recepcion Inspeccion</label>
+                                <input onChange={handleInputsExpediente} type="date" name="fechaRecepcionInspeccion" id="" value={objExpediente.fechaRecepcionInspeccion} />
+
                                 <label htmlFor="">Fecha Limite Inspeccion</label>
                                 <input onChange={handleInputsExpediente} type="date" name="fechaLimiteInspeccion" id="" value={objExpediente.fechaLimiteInspeccion} />
                             </div>
                             <div className="datos-rigth">
-
                                 <label htmlFor="">Ruc</label>
                                 <input onChange={handleInputsExpediente} type="text" name="ruc" id="" value={objExpediente.ruc} />
                                 <label htmlFor="">N. Informe</label>
-                                <input onChange={handleInputsExpediente} type="tel" name="numeroInforme" id="" value={objExpediente.numeroInforme} />
+                                <input onChange={handleInputsExpediente} type="text" name="numeroInforme" id="" value={objExpediente.numeroInforme} />
                                 <label htmlFor="">Estado</label>
-                                <select name="estado" id="" value={objExpediente.estado}>
-                                    <option value="" disabled>-------</option>
+                                <select name="idEstado" id="" value={objExpediente.idEstado} onChange={handleInputsExpediente}>
+                                    <option value="1">-------</option>
                                     <option value="2">Aprobado</option>
                                     <option value="3">Desaprobado</option>
                                 </select>
@@ -192,14 +223,12 @@ export const ExpedientePage = () => {
                                 <input onChange={handleInputsExpediente} type="date" name="fecha" id="" value={objExpediente.fecha} />
                                 <label htmlFor="">Hora</label>
                                 <input onChange={handleInputsExpediente} type="time" name="hora" id="" value={objExpediente.hora} />
-                                <label htmlFor="">Inspectores</label>
-                                <input onChange={handleInputsExpediente} type="text" name="inspectores" id="" value={objExpediente.inspectores} />
                                 <label htmlFor="">ILO</label>
-                                <input onChange={handleInputsExpediente} type="date" name="ilo" id="" value={objExpediente.ilo} />
+                                <input onChange={handleInputsExpediente} type="date" name= "ILO" id="" value={objExpediente.ILO} />
                             </div>
                         </div>
                         <div className="buttons-update-expediente">
-                            <input onChange={handleInputsExpediente} type="submit" value="Guardar" />
+                            <input type="submit" value="Guardar" />
                             <input type="button" onClick={() => ocultarPopupExpediente()} value="Cancelar" />
                         </div>
                     </form>

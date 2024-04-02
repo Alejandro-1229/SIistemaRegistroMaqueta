@@ -5,8 +5,20 @@ import imageCalendario from "../../../../assets/image/calendario.png";
 import { selectSearch } from '../../../../popups/popupIngeniero';
 import useIngenierosPage from "./useIngenieroPage";
 import { useEffect, useState } from "react";
+import { Ingeniero } from "@/interfaces/Ingeniero";
+import axios from "axios";
 
 export const IngenierosPage = () => {
+
+    const [isPopupIngenieros, setIsPopupIngenieros] = useState("popup-ingenieros--hide");
+
+    const [isOverlayIngenieros, setIsOverlayIngenieros] = useState("overlay-ingenieros--hide");
+
+    const [objFecha, setObjFecha] = useState<Ingeniero>({
+        idPrSe: "",
+        fechaActualizada: "",
+        idRazon: "",
+    });
 
     const [data, setData] = useState([]);
     const [alertMessage, setAlertMessage] = useState('');
@@ -14,6 +26,7 @@ export const IngenierosPage = () => {
     const [selectedValue, setSelectedValue] = useState('');
     const [searchDate1, setSearchDate1] = useState('');
     const [searchDate2, setSearchDate2] = useState('');
+    const [idEstado, setIdEstado] = useState('');
     const { inspeccionSemanalList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo, findNumeroExpediente, findRazonSocial, findFuncion } = useIngenierosPage();
 
 
@@ -21,6 +34,35 @@ export const IngenierosPage = () => {
         listarInspeccionesSemanales();
         selectSearch();
     }, []);
+
+    const handleInputsIngeniero= (e) => {
+        const { name, value } = e.target;
+
+        setObjFecha({
+            ...objFecha,
+            [name]: value
+        });
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post(`http://localhost:8000/api/v1/actualizarFecha`, objFecha);
+            ocultarPopupIngenieros();
+            window.location.reload();
+        } catch (error) {
+            console.error('Error al actualizar la fecha de Inspeccion:', error);
+        }
+    };
+
+    const handleGuardar = async (id : string|number) => {
+        try {
+            await axios.patch(`http://localhost:8000/api/v1/programacionSemanal/updateEstado/${id}`, {idEstado: idEstado});
+            window.location.reload();
+        } catch (error) {
+            console.error('Error al actualizar la fecha de Inspeccion:', error);
+        }
+    };
 
     const listarInspeccionesSemanales = async () => {
         try {
@@ -72,8 +114,8 @@ export const IngenierosPage = () => {
     const handleSubmitForFunction = async (e) => {
         e.preventDefault();
         try {
-            await buscarFuncion(selectedValue, searchDate1, searchDate2); 
-            
+            await buscarFuncion(selectedValue, searchDate1, searchDate2);
+
         } catch (error) {
             console.error("Error handling submit:", error);
         }
@@ -96,6 +138,21 @@ export const IngenierosPage = () => {
             console.error("Error handling submit:", error);
         }
     };
+
+    const mostrarPopupIngenieros = (params: Ingeniero) => {
+        if (isPopupIngenieros === "popup-ingenieros--hide") {
+            setIsPopupIngenieros("popup-ingenieros--show");
+            setIsOverlayIngenieros("overlay-ingenieros--show");
+            setObjFecha(params);
+        }
+    }
+
+    const ocultarPopupIngenieros = () => {
+        if (isPopupIngenieros === "popup-ingenieros--show") {
+            setIsPopupIngenieros("popup-ingenieros--hide");
+            setIsOverlayIngenieros("overlay-ingenieros--hide");
+        }
+    }
 
     return (
         <div className="global-ingenieros">
@@ -201,14 +258,14 @@ export const IngenierosPage = () => {
                                     <td>{inspeccion.ingeniero_1}</td>
                                     <td>{inspeccion.ingeniero_2}</td>
                                     <td>
-                                        <select name="" id="">
+                                        <select name="idEstado" value={idEstado} onChange={(e) => setIdEstado(e.target.value)}>
                                             <option value="" selected disabled>--------</option>
                                             <option value="2">Aprobado</option>
                                             <option value="3">Desaprobado</option>
                                         </select>
                                     </td>
-                                    <td><button type="submit"><img src={imageGuardar} alt="" /></button></td>
-                                    <td><button id="showPopup" type="submit"><img src={imageCalendario} alt="" /></button></td>
+                                    <td><button onClick={() => handleGuardar(inspeccion.idPrSe)} ><img src={imageGuardar} alt=" Boton Guardar Registro" title="Boton Guardar Registro" /></button></td>
+                                    <td><button onClick={() => mostrarPopupIngenieros(inspeccion)} type="submit"><img src={imageCalendario} alt="Boton Cambiar Fecha" title="Boton Cambiar Fecha" /></button></td>
                                 </tr>
 
                             ))}
@@ -216,26 +273,28 @@ export const IngenierosPage = () => {
                     </table>
                 </div>
 
-                <div className="overlay-ingenieros" id="overlay"></div>
+                <div className="overlay-ingenieros" id={isOverlayIngenieros}></div>
 
-                <div className="popup-ingenieros" id="popup">
+                <div className="popup-ingenieros" id={isPopupIngenieros}>
                     <h2>Actualizar Fecha</h2>
-                    <form id="form-aplazar-fecha" action="#" method="post">
-
+                    <form id="form-aplazar-fecha" onSubmit={handleSubmit}>
                         <div className="content-form-ingenieros">
+                            <input type="hidden" value={objFecha.idPrSe} name="idPrSe"/>
                             <label htmlFor="">Nueva Fecha</label>
-                            <input type="date" required />
+                            <input onChange={handleInputsIngeniero} name="fechaActualizada" type="date" required/>
                             <label htmlFor="">Razon</label>
-                            <select name="" id="" required>
+                            <select onChange={handleInputsIngeniero} name="idRazon" id="" required>
                                 <option value="1">--------</option>
                                 <option value="2">Ausencia del la administradora o de la persona a quien estela designe</option>
                                 <option value="3">Complejidad del establecimiento objeto de inspeccion</option>
-                                <option value="4">Impedimentos para la verificacion de todo o parte del establecimiento objeto de inspeccion</option>
+                                <option value="4">Impedimentos para la verificacion de todo o parte del establecimiento objeto
+                                    de inspeccion</option>
                                 <option value="5">Caso fortuito o caso mayor</option>
                             </select>
                         </div>
-                        <div className="buttons">
+                        <div className="buttons-update-ingenieros">
                             <input type="submit" value="Guardar" />
+                            <input type="button" onClick={() => ocultarPopupIngenieros()} value="Cancelar" />
                         </div>
                     </form>
                 </div>

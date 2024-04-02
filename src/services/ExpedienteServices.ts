@@ -28,5 +28,14 @@ class ExpedenteServices extends Service {
             console.error('Error al enviar elemento a programación:', error);
         }
     };
+
+    async createInspeccion (id: string | number) {
+        try {
+            const url = `/api/v1/programacionSemanal/`;
+            return await this.http.post(url, { "idExpediente": id });
+        } catch (error) {
+            console.error('Error al enviar elemento a inspeccion:', error);
+        }
+    };
 }
 export default ExpedenteServices;
