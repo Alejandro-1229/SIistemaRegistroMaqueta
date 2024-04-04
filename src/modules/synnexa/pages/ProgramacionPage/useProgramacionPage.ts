@@ -1,3 +1,4 @@
+import AuthService from "@/services/AuthService";
 import ProgramacionServices from "@/services/ProgramacionServices";
 import { useNavigate } from "react-router-dom"
 
@@ -7,6 +8,9 @@ const useProgramacionPage = () => {
     const apiProgramacionService = new ProgramacionServices();
 
     const navegacionCierreSesion = () => {
+        const apiClose = new AuthService();
+        apiClose.logout();
+        navigate("/"); 
         navigate("/");
     }
     const navegacionProgramacion = () => {

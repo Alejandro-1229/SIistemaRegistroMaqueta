@@ -1,3 +1,4 @@
+import AuthService from '@/services/AuthService';
 import ControlService from '@/services/ControlServices';
 import { useNavigate } from 'react-router-dom'; 
 
@@ -7,6 +8,8 @@ const useControlPage = () => {
     const apiControlService = new ControlService();
 
     const navegacionCierreSesion = () => {
+        const apiClose = new AuthService();
+        apiClose.logout();
         navigate("/"); 
     }
     const navegacionProgramacion = () => {

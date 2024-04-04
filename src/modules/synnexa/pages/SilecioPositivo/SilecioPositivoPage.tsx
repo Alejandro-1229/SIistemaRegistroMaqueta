@@ -4,7 +4,6 @@ import imageCalendario from "../../../../assets/image/calendario.png";
 import imageEliminar from "../../../../assets/image/eliminar.png";
 import { useEffect, useState } from "react";
 import useSilencioPositivoPage from "./useSilencioPositivoPage";
-import axios from "axios";
 import { SilencioPositivo } from "@/interfaces/SilencioPositivo";
 
 
@@ -18,7 +17,7 @@ export const SilecioPositivoPage = () => {
     });
 
     const [data, setData] = useState([]);
-    const { silencioPositivoList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo } = useSilencioPositivoPage();
+    const { restaurarFecha ,cambiarEstadoEliminado, silencioPositivoList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo } = useSilencioPositivoPage();
     const handleInputsSilencioPositivo = (e) => {
         const { name, value } = e.target;
 
@@ -34,7 +33,7 @@ export const SilecioPositivoPage = () => {
 
     const handleEliminar = async (id: string | number) => {
         try {
-            await axios.patch(`http://localhost:8000/api/v1/programacionSemanal/updateCancelar/${id}`);
+            await cambiarEstadoEliminado(id);
             ocultarPopupSilencioPositivo();
             window.location.reload();
         } catch (error) {
@@ -50,7 +49,7 @@ export const SilecioPositivoPage = () => {
 
     const handleSubmit = async (id: string | number) => {
         try {
-            await axios.patch(`http://localhost:8000/api/v1/programacionSemanal/actualizarFecha/${id}`, objFecha);
+            await restaurarFecha(id , objFecha);
             ocultarPopupSilencioPositivo();
             window.location.reload();
         } catch (error) {
@@ -121,7 +120,7 @@ export const SilecioPositivoPage = () => {
                         </thead>
                         <tbody>
                             {data.map(silencioPositivo => (
-                                <tr key={silencioPositivo.idPrse}>
+                                <tr key={silencioPositivo.idPrSe}>
                                     <td>{silencioPositivo.numeroExp}</td>
                                     <td>{silencioPositivo.ingeniero_1}</td>
                                     <td>{silencioPositivo.local}</td>

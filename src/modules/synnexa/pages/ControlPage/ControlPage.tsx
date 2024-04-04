@@ -5,11 +5,16 @@ import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-prev
 import { useEffect, useState } from "react";
 import useControlPage from "./useControlPage";
 import { initPopup, selectSearch } from '../../../../popups/popupControl';
+import { Control } from "react-hook-form";
 
 export const ControlPage = () => {
     const [data, setData] = useState<any[]>([]);
     const [searchValue, setSearchValue] = useState('');
-    
+
+    const [isPopupControl, setIsPopupControl] = useState("popup-control--hide");
+
+    const [isOverlayControl, setIsOverlayControl] = useState("overlay-control--hide");
+
     const [searchDate1, setSearchDate1] = useState('');
     const [searchDate2, setSearchDate2] = useState('');
     const [alertMessage, setAlertMessage] = useState('');
@@ -31,7 +36,7 @@ export const ControlPage = () => {
             console.error("Error fetching data:", error);
         }
     };
-
+/*
     const mandarExpediente = async (id:any) => {
         try {
             await crearExpediente(id);
@@ -42,7 +47,7 @@ export const ControlPage = () => {
 
         }
     }
-
+*/
     const buscarLocal = async (nombreComercial: string) => {
         try {
             const elemento = await findRazonSocial(nombreComercial);
@@ -127,16 +132,22 @@ export const ControlPage = () => {
         }
     };
     
-/*
-    const handleSubmitUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            await updateControl(datosFormulario, idRegistro); // Asegúrate de tener los datos correctos del formulario y el ID del registro.
-        } catch (error) {
-            console.error('Error al enviar el formulario de edición:', error);
+
+    const mostrarPopupControl = (paramControl: Control) => {
+        if (isPopupControl === "popup-control--hide") {
+            setIsPopupControl("popup-control--show");
+            setIsOverlayControl("overlay-control--show");
+            //setObjControl(paramControl);
         }
-    };
-*/
+
+    }
+
+    const ocultarPopupControl = () => {
+        if (isPopupControl === "popup-control--show") {
+            setIsPopupControl("popup-control--hide");
+            setIsOverlayControl("overlay-control--hide");
+        }
+    }
 
     return (
         <div className="global-control">

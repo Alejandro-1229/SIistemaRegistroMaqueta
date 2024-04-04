@@ -11,7 +11,7 @@ import axios from "axios";
 export const ExpedientePage = () => {
     const [data, setData] = useState([]);
     
-    const { crearInspeccion, crearProgramacion, navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList } = useExpedientePage();
+    const { crearInspeccion, crearProgramacion, navegacionCierreSesion, navegacionExpediente, navegacionProgramacion, navegacionControl, expedienteList, updateExpediente } = useExpedientePage();
 
     const [isPopupExpediente, setIsPopupExpediente] = useState("popup-expediente--hide");
 
@@ -69,7 +69,8 @@ export const ExpedientePage = () => {
             ILO: objExpediente.ILO,
           };
             
-            await axios.put(`http://localhost:8000/api/v1/expedientes/${objExpediente.idExpe}`, cuerpo);
+           // await axios.put(`http://localhost:8000/api/v1/expedientes/${objExpediente.idExpe}`, cuerpo);
+           await updateExpediente(objExpediente.idExpe,cuerpo)
             ocultarPopupExpediente();
             window.location.reload();
         } catch (error) {

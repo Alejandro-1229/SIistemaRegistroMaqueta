@@ -12,14 +12,14 @@ class Service {
   };
 
   constructor() {
-    //const token = window.localStorage.getItem('token');
-    //const authorizationToken = token ? { Authorization: `Bearer ${token}` } : null;
+    const token = window.localStorage.getItem('token');
+    const authorizationToken = token ? { Authorization: `Bearer ${token}` } : null;
 
     this.http = axios.create({
       baseURL: this.baseUrl,
       headers: {
         ...this.headers,
-        //...authorizationToken,
+        ...authorizationToken,
       },
     });
   }

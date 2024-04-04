@@ -23,8 +23,8 @@ class IngeneiroServices extends Service {
             const url = `/api/v1/programacionSemanal/listadoFechas/${funcion}/${fechaInicio}/${fechaFinal}`;
             return await this.http.get(url);
         } catch (error: any) {
-            console.log(error.response);
-            return error.response;
+            console.log(error.response?.data || error.message); 
+            return error.response?.data || error.message;
         }
     }
     async filtroRazonSocial(razonSocial: string) {
@@ -32,8 +32,27 @@ class IngeneiroServices extends Service {
             const url = `/api/v1/programacionSemanal/busquedaNombreComercial/${razonSocial}`;
             return await this.http.get(url);
         } catch (error: any) {
-            console.log(error.response);
-            return error.response;
+            console.log(error.response?.data || error.message); 
+            return error.response?.data || error.message;
+        }
+    }
+    async guardarInspeccion(id: string|number, body= {}){
+        try {
+            const url = `/api/v1/programacionSemanal/updateEstado/${id}`;
+            return await this.http.patch(url, body);
+        } catch (error: any) {
+            console.log(error.response?.data || error.message); 
+            return error.response?.data || error.message;
+        }
+    }
+
+    async cambioFecha(body= {}){
+        try {
+            const url = `/api/v1/actualizarFecha`;
+            return await this.http.post(url, body);
+        } catch (error: any) {
+            console.log(error.response?.data || error.message); 
+            return error.response?.data || error.message;
         }
     }
 }

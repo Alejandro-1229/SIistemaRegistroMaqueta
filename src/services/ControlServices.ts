@@ -10,7 +10,7 @@ class ControlServices extends Service {
             return error.response;
         } 
     }
-    async crateControl(body = {}) {
+    async createControl(body = {}) {
         try {
             return await this.http.post('/api/v1/controles', body)
         } catch (error: any) {

@@ -284,10 +284,21 @@
     z-index: 9999;
     max-height: 80%;
     overflow-y: auto;
-    /* Añadir scroll cuando el contenido excede el tamaño del popup */
     width: 90%;
     max-width: 400px;
-    /* Ancho máximo para dispositivos grandes */
+}
+
+#popup-control--show{
+    display: block;
+}
+#overlay-control--show{
+    display: block;
+}
+#overlay-control--hide{
+    display: none;
+}
+#popup-control--hide{
+    display: none;
 }
 
 /* Estilos para el overlay */

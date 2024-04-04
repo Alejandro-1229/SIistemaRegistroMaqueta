@@ -1,3 +1,4 @@
+import AuthService from "@/services/AuthService";
 import IngeneiroServices from "@/services/IngeneroServices";
 import { useNavigate } from "react-router-dom"
 
@@ -7,13 +8,31 @@ const useIngenierosPage = () => {
     const apiIngenieroService = new IngeneiroServices();
 
     const navegacionCierreSesion = () => {
-        navigate("/");
+        const apiClose = new AuthService();
+        apiClose.logout();
+        navigate("/"); 
     }
     const navegacionIngenieros = () => {
         navigate("/ingenieros");
     }
     const navegacionSilecioPositivo = () => { 
         navigate("/silencioPositivo");
+    }
+
+    const guardarInspeccion = async (id: string|number, body = {}): Promise<void> => {
+        try {
+            await apiIngenieroService.guardarInspeccion(id, body);
+        } catch (error) {
+            throw new Error('Error al guardar el elemento: ' + error);
+        }
+    }
+
+    const cambiarFecha = async (body = {}): Promise<void> => {
+        try {
+            await apiIngenieroService.cambioFecha(body);
+        } catch (error) {
+            throw new Error('Error al reestablecer fechas: ' + (error.response?.data || error.message)); // Lanza un nuevo error con el mensaje específico
+        }
     }
 
     const inspeccionSemanalList = async (): Promise<Object[]> => {
@@ -65,6 +84,8 @@ const useIngenierosPage = () => {
             findNumeroExpediente,
             findRazonSocial,
             findFuncion,
+            guardarInspeccion,
+            cambiarFecha
         }
     ) 
 }

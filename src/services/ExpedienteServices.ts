@@ -10,7 +10,7 @@ class ExpedenteServices extends Service {
             return error.response;
         }
     }
-    async update(body = {}, id: string | number) {
+    async update(id: string | number, body = {}) {
         try {
             const url = `/api/v1/expedientes/${id}`;
             return await this.http.put(url, body);

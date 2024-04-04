@@ -1,50 +1,68 @@
-.login {
-  color: $white-color;
-  width: 300px;
-  margin: 0 auto;
-  &__header {
-    margin-bottom: 1rem;
-    .login__title {
-      font-weight: 700;
-      font-size: 1.5rem;
-    }
-    .login__new {
-      font-size: 0.8rem;
-      &--create {
-        color: $link-color;
-      }
-    }
-  }
-  &__options {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 1rem;
-    .login__item {
-      width: 100%;
-      height: 4rem;
-      border: 1px solid black;
-    }
-  }
-  &__form {
-    display: flex;
-    flex-direction: column;
-    margin-top: 2rem;
-    .login__buttons {
-      margin-top: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      .login__button {
-        width: 100%;
-        padding: 0.5rem;
-        background: $button-color;
-        border: none;
-        font-weight: 600;
-        font-size: 1rem;
-        color: $white-color;
-      }
-    }
-  }
+header {
+  display: none;
+}
+
+footer {
+  display: none;
+}
+
+.login-container {
+  background-image: url("../../../../assets/image/5ad89931d75d7.jpeg");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  background-color: #fbfbfb;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group-index {
+  margin-bottom: 20px;
+}
+
+.form-group-index label {
+  display: block;
+  font-weight: bold;
+}
+
+.form-group-index input[type=text]{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.form-group-index input[type=password]{
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+}
+
+.button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button:hover {
+  background-color: #0056b3;
 }

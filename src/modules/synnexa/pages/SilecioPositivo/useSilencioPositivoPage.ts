@@ -1,3 +1,4 @@
+import AuthService from "@/services/AuthService";
 import SilecioPositivoServices from "@/services/SilencioPositivoServices";
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +7,9 @@ const useSilencioPositivoPage = () => {
     const apiSilecioPositivo = new SilecioPositivoServices;
 
     const navegacionCierreSesion = () => {
-        navigate("/");
+        const apiClose = new AuthService();
+        apiClose.logout();
+        navigate("/"); 
     }
     const navegacionIngenieros = () => { 
         navigate("/ingenieros");
@@ -24,12 +27,30 @@ const useSilencioPositivoPage = () => {
         }
     };
 
+    const cambiarEstadoEliminado = async (id: string|number) : Promise<void>=> {
+        try {
+            await apiSilecioPositivo.eliminarElemento(id);
+        } catch (error) {
+            throw new Error("Error al eliminar al elemento" + error);
+        }
+    };
+
+    const restaurarFecha = async (id: string|number, body = {}) : Promise<void>=> {
+        try {
+            await apiSilecioPositivo.restaurarFecha(id,body);
+        } catch (error) {
+            throw new Error("Error al reestablecer la fecha " + error);
+        }
+    };
+
     return (
         {
             navegacionCierreSesion,
             navegacionIngenieros,
             navegacionSilecioPositivo,
             silencioPositivoList,
+            cambiarEstadoEliminado,
+            restaurarFecha
         }
     )
 }

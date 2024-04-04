@@ -1,3 +1,4 @@
+import AuthService from '@/services/AuthService';
 import ExpedienteServices from '@/services/ExpedienteServices';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,6 +8,8 @@ const useExpedientePage = () => {
     const apiExpedienteService = new ExpedienteServices();
 
     const navegacionCierreSesion = () => {
+        const apiClose = new AuthService();
+        apiClose.logout();
         navigate("/");
     }
     const navegacionProgramacion = () => {
@@ -27,9 +30,9 @@ const useExpedientePage = () => {
         }
     };
 
-    const updateExpediente = async (datos = {}, id: string | number): Promise<void> => {
+    const updateExpediente = async (id: string | number, datos = {}): Promise<void> => {
         try {
-            const respuesta = await apiExpedienteService.update(datos, id);
+            const respuesta = await apiExpedienteService.update(id, datos);
             console.log(`Registro actualizado con éxito: ${respuesta.idExpe}`);
         } catch (error) {
             console.error('Error al actualizar el registro:', error);

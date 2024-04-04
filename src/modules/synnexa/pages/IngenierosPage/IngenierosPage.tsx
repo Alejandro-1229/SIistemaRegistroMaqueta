@@ -27,7 +27,7 @@ export const IngenierosPage = () => {
     const [searchDate1, setSearchDate1] = useState('');
     const [searchDate2, setSearchDate2] = useState('');
     const [idEstado, setIdEstado] = useState('');
-    const { inspeccionSemanalList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo, findNumeroExpediente, findRazonSocial, findFuncion } = useIngenierosPage();
+    const { cambiarFecha ,guardarInspeccion ,inspeccionSemanalList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo, findNumeroExpediente, findRazonSocial, findFuncion } = useIngenierosPage();
 
 
     useEffect(() => {
@@ -47,7 +47,7 @@ export const IngenierosPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`http://localhost:8000/api/v1/actualizarFecha`, objFecha);
+            await cambiarFecha(objFecha)
             ocultarPopupIngenieros();
             window.location.reload();
         } catch (error) {
@@ -57,7 +57,7 @@ export const IngenierosPage = () => {
 
     const handleGuardar = async (id : string|number) => {
         try {
-            await axios.patch(`http://localhost:8000/api/v1/programacionSemanal/updateEstado/${id}`, {idEstado: idEstado});
+            await guardarInspeccion(id,{idEstado: idEstado});
             window.location.reload();
         } catch (error) {
             console.error('Error al actualizar la fecha de Inspeccion:', error);
@@ -201,8 +201,8 @@ export const IngenierosPage = () => {
                             <form onSubmit={handleSubmitForFunction} action="">
                                 <div className="input-group-inspeccion">
                                     <label htmlFor="">Funcion</label>
-                                    <select name="" id="" onChange={(e) => setSelectedValue(e.target.value)} required>
-                                        <option value="" selected disabled></option>
+                                    <select name="" defaultValue={""} onChange={(e) => setSelectedValue(e.target.value)} required>
+                                        <option value="" disabled></option>
                                         <option value="Encuentro">Encuentro</option>
                                         <option value="Comercio">Comercio</option>
                                         <option value="Administrativa">Administrativa</option>
@@ -258,8 +258,8 @@ export const IngenierosPage = () => {
                                     <td>{inspeccion.ingeniero_1}</td>
                                     <td>{inspeccion.ingeniero_2}</td>
                                     <td>
-                                        <select name="idEstado" value={idEstado} onChange={(e) => setIdEstado(e.target.value)}>
-                                            <option value="" selected disabled>--------</option>
+                                        <select name="idEstado" defaultValue={idEstado} onChange={(e) => setIdEstado(e.target.value)} required>
+                                            <option value="1">--------</option>
                                             <option value="2">Aprobado</option>
                                             <option value="3">Desaprobado</option>
                                         </select>
@@ -283,7 +283,7 @@ export const IngenierosPage = () => {
                             <label htmlFor="">Nueva Fecha</label>
                             <input onChange={handleInputsIngeniero} name="fechaActualizada" type="date" required/>
                             <label htmlFor="">Razon</label>
-                            <select onChange={handleInputsIngeniero} name="idRazon" id="" required>
+                            <select required  onChange={handleInputsIngeniero} name="idRazon" id="">
                                 <option value="1">--------</option>
                                 <option value="2">Ausencia del la administradora o de la persona a quien estela designe</option>
                                 <option value="3">Complejidad del establecimiento objeto de inspeccion</option>
