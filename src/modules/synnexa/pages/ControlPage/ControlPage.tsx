@@ -4,7 +4,7 @@ import sendExpedienteIcon from "../../../../assets/image/expediente.png";
 import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-preview.png";
 import { useEffect, useState } from "react";
 import useControlPage from "./useControlPage";
-import { initPopup, selectSearch } from '../../../../popups/popupControl';
+import { selectSearch } from '../../../../popups/popupControl';
 import { Control } from "react-hook-form";
 
 export const ControlPage = () => {
@@ -24,9 +24,8 @@ export const ControlPage = () => {
 
     useEffect(() => {
         fetchData();
-        initPopup();
         selectSearch();
-    }, []);
+    }, []); 
 
     const fetchData = async () => {
         try {
@@ -188,7 +187,7 @@ export const ControlPage = () => {
                         </div>
                         <div className="tipos">
                             <div id="content-find-razon-social" className="razon-social">
-                                <form onSubmit={handleSubmitForRazonSocial} action="">
+                                <form onSubmit={handleSubmitForRazonSocial}>
                                     <div className="input-group">
                                         <input type="text" autoFocus placeholder="Razon Social/Nombre Comercial" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                                         <input type="submit" value="Buscar" />
@@ -198,7 +197,7 @@ export const ControlPage = () => {
                             </div>
                             <div id="content-find-expediente" className="expediente">
 
-                                <form onSubmit={handleSubmitForNumeroExpediente} action="">
+                                <form onSubmit={handleSubmitForNumeroExpediente}>
                                     <div className="input-group">
                                         <input type="text" placeholder="Numero de Expediente" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                                         <input type="submit" value="Buscar" />
@@ -207,7 +206,7 @@ export const ControlPage = () => {
                                 {alertMessage && <p>{alertMessage}</p>}
                             </div>
                             <div id="content-find-funcion" className="funcion">
-                                <form onSubmit={handleSubmitForFuncion} action="">
+                                <form onSubmit={handleSubmitForFuncion}>
                                     <div className="input-group">
                                         <input onChange={(e) => setSearchDate1(e.target.value)} type="date" name="" id="" required/>
                                         <input onChange={(e) => setSearchDate2(e.target.value)} type="date" name="" id="" required/>
@@ -225,6 +224,7 @@ export const ControlPage = () => {
                                         <input type="submit" value="Buscar" />
                                     </div>
                                 </form>
+                                <p>Registros: {data.length}</p> 
                             </div>
                             <div id="content-find-tipo" className="tipo-itse">
                                 <form onSubmit={handleSubmitForTipoItse} action="">
@@ -239,6 +239,7 @@ export const ControlPage = () => {
                                         <input type="submit" value="Buscar" />
                                     </div>
                                 </form>
+                                <p>Registros: {data.length}</p> 
                             </div>
                         </div>
                     </div>
@@ -402,7 +403,7 @@ export const ControlPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map(control => (
+                            {data && data.length > 0 && data.map(control => (
                                 <tr key={control.idControl}>
                                     <td>{control.numeroExpediente}</td>
                                     <td>{control.tipoItse}</td>

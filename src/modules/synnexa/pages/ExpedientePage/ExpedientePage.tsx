@@ -6,7 +6,6 @@ import miImagen from "../../../../assets/image/Diseño_sin_título-removebg-prev
 import { useEffect, useState } from "react";
 import useExpedientePage from "./useExpedientePage";
 import { Expediente } from "@/interfaces/Expediente";
-import axios from "axios";
 
 export const ExpedientePage = () => {
     const [data, setData] = useState([]);
@@ -166,7 +165,7 @@ export const ExpedientePage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map(expediente => (
+                            {data && data.length > 0 && data.map(expediente => (
                                 <tr key={expediente.idExpe}>
                                     <td>{expediente.numeroExpediente}</td>
                                     <td>{expediente.ruc}</td>

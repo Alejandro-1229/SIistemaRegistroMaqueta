@@ -4,15 +4,17 @@ import imageGuardar from "../../../../assets/image/guardar-el-archivo.png";
 import imageCalendario from "../../../../assets/image/calendario.png";
 import { selectSearch } from '../../../../popups/popupIngeniero';
 import useIngenierosPage from "./useIngenieroPage";
+import useSilencioPositivoPage from "../SilecioPositivo/useSilencioPositivoPage";
 import { useEffect, useState } from "react";
 import { Ingeniero } from "@/interfaces/Ingeniero";
-import axios from "axios";
 
 export const IngenierosPage = () => {
 
     const [isPopupIngenieros, setIsPopupIngenieros] = useState("popup-ingenieros--hide");
 
     const [isOverlayIngenieros, setIsOverlayIngenieros] = useState("overlay-ingenieros--hide");
+    
+    const [cantidad, setCantidad] = useState<number | null>(null);
 
     const [objFecha, setObjFecha] = useState<Ingeniero>({
         idPrSe: "",
@@ -27,12 +29,14 @@ export const IngenierosPage = () => {
     const [searchDate1, setSearchDate1] = useState('');
     const [searchDate2, setSearchDate2] = useState('');
     const [idEstado, setIdEstado] = useState('');
+    const { getCantidadElementos } = useSilencioPositivoPage();
     const { cambiarFecha ,guardarInspeccion ,inspeccionSemanalList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo, findNumeroExpediente, findRazonSocial, findFuncion } = useIngenierosPage();
 
 
     useEffect(() => {
         listarInspeccionesSemanales();
         selectSearch();
+        cantidadElementos()
     }, []);
 
     const handleInputsIngeniero= (e) => {
@@ -100,6 +104,16 @@ export const IngenierosPage = () => {
         } catch (error) {
             console.error("Error searching element:", error);
             setAlertMessage('Error al buscar el elemento.');
+        }
+    };
+
+    const cantidadElementos = async () => {
+        try {
+            // Lógica para obtener la cantidad de elementos
+            const cantidadObtenida = await getCantidadElementos();
+            setCantidad(cantidadObtenida);
+        } catch (error) {
+            console.error('Error al obtener la cantidad de elementos:', error);
         }
     };
 
@@ -171,7 +185,7 @@ export const IngenierosPage = () => {
                 <nav id="menu">
                     <ul>
                         <li><a onClick={() => navegacionIngenieros()}>Inspecciones Semanales</a></li>
-                        <li><a onClick={() => navegacionSilecioPositivo()}>Silecio Positivo</a></li>
+                        <li><a onClick={() => navegacionSilecioPositivo()}>Silecio Positivo {cantidad !== null && cantidad}</a></li>
                     </ul>
                 </nav>
             </div>
@@ -248,7 +262,7 @@ export const IngenierosPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map(inspeccion => (
+                            {data && data.length > 0 && data.map(inspeccion => (
                                 <tr key={inspeccion.idPrSe}>
                                     <td>{inspeccion.fechaInspeccion}</td>
                                     <td>{inspeccion.numeroExp}</td>

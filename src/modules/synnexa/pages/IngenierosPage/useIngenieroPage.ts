@@ -66,7 +66,7 @@ const useIngenierosPage = () => {
 
         try {
             const response = await apiIngenieroService.filtroFuncion(funcion, fechaInicio, fechaFinal);
-            return response.data.data.listado;
+            return response.data.data;
         } catch (error) {
             throw new Error('Error al buscar el elemento: ' + error);
         }

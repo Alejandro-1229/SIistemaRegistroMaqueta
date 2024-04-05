@@ -26,6 +26,15 @@ class SilecioPositivoServices extends Service{
             return error.response?.data || error.message;
         }
     }
+
+    async cantidadElementos(){
+        try {
+            return await this.http.get('/api/v1/programacionSemanal/cantidadSilencioPositivo');
+        } catch (error: any) {
+            console.log(error.response?.data || error.message); 
+            return error.response?.data || error.message;
+        }
+    }
 }
 
 export default SilecioPositivoServices

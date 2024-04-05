@@ -13,11 +13,14 @@ export const SilecioPositivoPage = () => {
     const [isOverlaySilencioPositivo, setIsOverlaySilencioPositivo] = useState("overlay-silencioPositivo--hide");
 
     const [objFecha, setObjFecha] = useState<SilencioPositivo>({
-        fechaInspeccion: ""
+        fechaInspeccion: "" 
     });
 
+    
+    const [cantidad, setCantidad] = useState<number | null>(null);
+
     const [data, setData] = useState([]);
-    const { restaurarFecha ,cambiarEstadoEliminado, silencioPositivoList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo } = useSilencioPositivoPage();
+    const { getCantidadElementos ,restaurarFecha ,cambiarEstadoEliminado, silencioPositivoList, navegacionCierreSesion, navegacionIngenieros, navegacionSilecioPositivo } = useSilencioPositivoPage();
     const handleInputsSilencioPositivo = (e) => {
         const { name, value } = e.target;
 
@@ -29,6 +32,7 @@ export const SilecioPositivoPage = () => {
 
     useEffect(() => {
         listarSilenciosPositivos();
+        cantidadElementos()
     }, []);
 
     const handleEliminar = async (id: string | number) => {
@@ -54,6 +58,16 @@ export const SilecioPositivoPage = () => {
             window.location.reload();
         } catch (error) {
             console.error('Error al actualizar la fecha de Inspeccion:', error);
+        }
+    };
+
+    const cantidadElementos = async () => {
+        try {
+            // Lógica para obtener la cantidad de elementos
+            const cantidadObtenida = await getCantidadElementos();
+            setCantidad(cantidadObtenida);
+        } catch (error) {
+            console.error('Error al obtener la cantidad de elementos:', error);
         }
     };
 
@@ -99,7 +113,7 @@ export const SilecioPositivoPage = () => {
                 <nav id="menu">
                     <ul>
                         <li><a onClick={() => navegacionIngenieros()}>Inspecciones Semanales</a></li>
-                        <li><a onClick={() => navegacionSilecioPositivo()}>Silecio Positivo</a></li>
+                        <li><a onClick={() => navegacionSilecioPositivo()}>Silecio Positivo {cantidad !== null && cantidad}</a></li>
                     </ul>
                 </nav>
             </div>
@@ -119,7 +133,7 @@ export const SilecioPositivoPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.map(silencioPositivo => (
+                            {data && data.length > 0 && data.map(silencioPositivo =>  (
                                 <tr key={silencioPositivo.idPrSe}>
                                     <td>{silencioPositivo.numeroExp}</td>
                                     <td>{silencioPositivo.ingeniero_1}</td>

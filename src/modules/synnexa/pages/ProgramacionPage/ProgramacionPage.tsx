@@ -63,7 +63,7 @@ export const ProgramacionPage = () => {
                             <th>Fecha Devolucion</th>
                         </thead>
                         <tbody>
-                            {data.map(programacion => (
+                            {data && data.length > 0 && data.map(programacion => (
                                 <tr key={programacion.idProg}>
                                     <td>{programacion.numeroExpediente}</td>
                                     <td>{programacion.ruc}</td>

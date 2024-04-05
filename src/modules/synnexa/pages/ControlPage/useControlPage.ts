@@ -75,16 +75,6 @@ const useControlPage = () => {
             console.error('Error al enviar el registro:', error);
         }
     };
-    /*
-    const cantidadElementos = async(findTipoItse: string | number, fechaInicio :Date, fechaFinal : Date): Promise<Object[]> => {
-        try {
-            const response = await apiControlService.filtroTipoItse(findTipoItse,fechaInicio,fechaFinal);
-            return response.data.data.cantidadRegistros
-        } catch (error) {
-            throw new Error('Error al buscar el elemento: ' + error);
-        }
-    };
-    */
     
 /*
     const updateControl = async (datos = {}, id: string | number): Promise<void> => {
@@ -107,8 +97,7 @@ const useControlPage = () => {
             findNumeroExpediente,
             findFuncion,
             findTipoItse,
-            crearExpediente
-            //cantidadElementos
+            crearExpediente,
             //updateControl
         }
     )
